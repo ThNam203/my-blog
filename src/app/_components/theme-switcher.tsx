@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   var updateDOM: () => void;
@@ -10,6 +10,12 @@ type ColorSchemePreference = "system" | "dark" | "light";
 
 const STORAGE_KEY = "nam-blog-theme";
 const modes: ColorSchemePreference[] = ["dark", "light", "system"];
+type ThemeLabelMap = Record<ColorSchemePreference, string>;
+const defaultModeLabels: ThemeLabelMap = {
+  dark: "Dark",
+  light: "Light",
+  system: "System",
+};
 
 /** to reuse updateDOM function defined inside injected script */
 
@@ -55,7 +61,7 @@ let updateDOM: () => void;
 /**
  * Switch button to quickly toggle user preference.
  */
-const Switch = () => {
+const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
   const [mode, setMode] = useState<ColorSchemePreference>("system");
   const [isMounted, setIsMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -126,7 +132,7 @@ const Switch = () => {
         className="rounded-md border border-neutral-300 bg-white px-3 py-1 text-sm font-semibold tracking-wide transition-colors hover:bg-neutral-100 dark:border-slate-600 dark:bg-slate-900 dark:hover:bg-slate-800"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        {isMounted ? mode.charAt(0).toUpperCase() + mode.slice(1) : "System"}
+        {isMounted ? labels[mode] : labels.system}
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 min-w-28 rounded-md border border-neutral-300 bg-white p-1 shadow-lg dark:border-slate-600 dark:bg-slate-900">
@@ -137,7 +143,7 @@ const Switch = () => {
               className="block w-full rounded px-3 py-1 text-left text-sm capitalize hover:bg-neutral-100 dark:hover:bg-slate-800"
               onClick={() => handleModeSelect(themeMode)}
             >
-              {themeMode}
+              {labels[themeMode]}
             </button>
           ))}
         </div>
@@ -146,22 +152,22 @@ const Switch = () => {
   );
 };
 
-const Script = memo(() => (
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `(${NoFOUCScript.toString()})('${STORAGE_KEY}')`,
-    }}
-  />
-));
+type Props = {
+  labels?: Partial<ThemeLabelMap>;
+};
 
 /**
  * This component applies classes and transitions.
  */
-export const ThemeSwitcher = () => {
+export const ThemeSwitcher = ({ labels }: Props) => {
+  const resolvedLabels: ThemeLabelMap = {
+    ...defaultModeLabels,
+    ...labels,
+  };
+
   return (
     <>
-      <Script />
-      <Switch />
+      <Switch labels={resolvedLabels} />
     </>
   );
 };

@@ -1,6 +1,12 @@
 import Container from "@/app/_components/container";
 
-const Alert = () => {
+type Props = {
+  textPrefix: string;
+  linkLabel: string;
+  websiteUrl: string;
+};
+
+const Alert = ({ textPrefix, linkLabel, websiteUrl }: Props) => {
   return (
     <div
       className="border-b dark:bg-slate-800 bg-neutral-800 border-neutral-800 text-white"
@@ -8,13 +14,14 @@ const Alert = () => {
       <Container>
         <div className="py-2 text-center text-sm">
           <>
-              This is my blog. You also want to check out my{" "}
+              {textPrefix}{" "}
               <a
-                href="https://letslive.work"
+                href={websiteUrl}
                 target="_blank"
+                rel="noreferrer"
                 className="underline hover:text-blue-600 duration-200 transition-colors"
               >
-                Let's Live website.
+                {linkLabel}
               </a>
               .
             </>

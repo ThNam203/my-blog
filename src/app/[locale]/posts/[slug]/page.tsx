@@ -7,28 +7,48 @@ import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
+import { getDictionary } from "@/i18n/dictionaries";
+import { isValidLocale } from "@/i18n/config";
+import { WEB_DEFAULT_URL } from "@/lib/constants";
+
+type Params = {
+  params: Promise<{
+    slug: string;
+    locale: string;
+  }>;
+};
 
 export default async function Post(props: Params) {
   const params = await props.params;
-  const post = getPostBySlug(params.slug);
+  if (!isValidLocale(params.locale)) {
+    return notFound();
+  }
+
+  const post = getPostBySlug(params.slug, params.locale);
 
   if (!post) {
     return notFound();
   }
 
+  const dictionary = getDictionary(params.locale);
   const content = await markdownToHtml(post.content || "");
 
   return (
     <main>
-      <Alert />
+      <Alert
+        textPrefix={dictionary.ui.alertTextPrefix}
+        linkLabel={dictionary.ui.alertLinkLabel}
+        websiteUrl={WEB_DEFAULT_URL}
+      />
       <Container>
-        <Header />
+        <Header locale={params.locale} title={dictionary.ui.headerTitle} />
         <article className="mb-32">
           <PostHeader
             title={post.title}
             coverImage={post.coverImage}
             date={post.date}
             author={post.author}
+            locale={params.locale}
           />
           <PostBody content={content} />
         </article>
@@ -37,21 +57,19 @@ export default async function Post(props: Params) {
   );
 }
 
-type Params = {
-  params: Promise<{
-    slug: string;
-  }>;
-};
-
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;
-  const post = getPostBySlug(params.slug);
+  if (!isValidLocale(params.locale)) {
+    return {};
+  }
 
+  const post = getPostBySlug(params.slug, params.locale);
   if (!post) {
     return notFound();
   }
 
-  const title = `${post.title} | Blog of Huỳnh Thành Nam`;
+  const dictionary = getDictionary(params.locale);
+  const title = `${post.title} | ${dictionary.metadata.siteName}`;
   const ogImageUrl = post.ogImage?.url ?? post.coverImage;
 
   return {
@@ -64,9 +82,17 @@ export async function generateMetadata(props: Params): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts();
+  const viPosts = getAllPosts("vi");
+  const enPosts = getAllPosts("en");
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+  return [
+    ...viPosts.map((post) => ({
+      locale: "vi",
+      slug: post.slug,
+    })),
+    ...enPosts.map((post) => ({
+      locale: "en",
+      slug: post.slug,
+    })),
+  ];
 }

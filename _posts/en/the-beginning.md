@@ -1,0 +1,28 @@
+---
+title: "The start of something new in me"
+excerpt: "A short introduction to my new writing journey, where I share what I learn and how I grow."
+date: "2026-04-29T00:11:07.564Z"
+author:
+  name: Huỳnh Thành Nam
+  picture: "/assets/blog/me/my_first_avatar.jpg"
+---
+
+## This is my very first post on my writing journey.
+
+I have always had a style that feels a bit unusual. Sometimes I write a lot, sometimes I write very little, and sometimes I write whatever comes to mind. To be honest, I am still not sure whether this kind of blogging is truly for me. But if I do not try, I will never know. Life is short, time is limited, and I want to spend my time doing things that make me feel alive.
+
+Most of what I write here will come from books I read, new things I explore, or moments when I feel overwhelmed and need a place to release my thoughts. It might feel random at times. It might even feel silly. But I hope it can still be meaningful, at least for me, and maybe for someone else too.
+
+There was also some outside influence that pushed me to begin this path. A friend. A girl. I truly learned a lot from that experience. Maybe the biggest lesson is trust: let people have time to think and face their own problems instead of caring too much in a way that controls them. Caring is good, but too much can hurt both sides. I am still learning how to care for myself first, because only then can I care for others in a healthier way.
+
+Anyway, I feel this is a good change. I feel more confident about my own path. I am still very uncertain about my future, and I do not think a traditional path is the only way for me forever. One great thing about working in IT is that remote work is possible, and I hope one day I can work while traveling. That is the direction I am moving toward.
+
+I want to find a new lifestyle, a new version of myself, and a new horizon. This blog is where I can express my inner world as someone who thinks a lot and is trying to understand himself beyond computer science and daily work. I do not know how far this passion will go, but I want to give it everything I have.
+
+## And so, a new path officially begins
+
+I hope this path brings me more experiences and lessons, whether happy or painful. I know this writing style may not attract many readers, and honestly, I am fine with that. More than anything, I just want a space to process my emotions and stay honest with myself.
+
+"There is no road on earth; people walk, and then a road appears." ~ Lu Xun
+
+This road will be made by my own steps. I wish the best for both you, the reader, and for myself.

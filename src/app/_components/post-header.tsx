@@ -3,15 +3,17 @@ import CoverImage from "./cover-image";
 import DateFormatter from "./date-formatter";
 import { PostTitle } from "@/app/_components/post-title";
 import { type Author } from "@/interfaces/author";
+import { type Locale } from "@/i18n/config";
 
 type Props = {
   title: string;
   coverImage?: string;
   date: string;
   author: Author;
+  locale: Locale;
 };
 
-export function PostHeader({ title, coverImage, date, author }: Props) {
+export function PostHeader({ title, coverImage, date, author, locale }: Props) {
   return (
     <>
       <PostTitle>{title}</PostTitle>
@@ -28,7 +30,7 @@ export function PostHeader({ title, coverImage, date, author }: Props) {
           <Avatar name={author.name} picture={author.picture} />
         </div>
         <div className="mb-6 text-lg">
-          <DateFormatter dateString={date} />
+          <DateFormatter dateString={date} locale={locale} />
         </div>
       </div>
     </>
