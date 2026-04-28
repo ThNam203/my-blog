@@ -1,7 +1,6 @@
 "use client";
 
-import styles from "./switch.module.css";
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 declare global {
   var updateDOM: () => void;
@@ -9,8 +8,8 @@ declare global {
 
 type ColorSchemePreference = "system" | "dark" | "light";
 
-const STORAGE_KEY = "nextjs-blog-starter-theme";
-const modes: ColorSchemePreference[] = ["system", "dark", "light"];
+const STORAGE_KEY = "nam-blog-theme";
+const modes: ColorSchemePreference[] = ["dark", "light", "system"];
 
 /** to reuse updateDOM function defined inside injected script */
 
@@ -57,38 +56,93 @@ let updateDOM: () => void;
  * Switch button to quickly toggle user preference.
  */
 const Switch = () => {
-  const [mode, setMode] = useState<ColorSchemePreference>(
-    () =>
-      ((typeof localStorage !== "undefined" &&
-        localStorage.getItem(STORAGE_KEY)) ??
-        "system") as ColorSchemePreference,
-  );
+  const [mode, setMode] = useState<ColorSchemePreference>("system");
+  const [isMounted, setIsMounted] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // store global functions to local variables to avoid any interference
     updateDOM = window.updateDOM;
+    const storedMode = localStorage.getItem(STORAGE_KEY);
+    if (storedMode === "dark" || storedMode === "light" || storedMode === "system") {
+      setMode(storedMode);
+    }
+    setIsMounted(true);
+
     /** Sync the tabs */
-    addEventListener("storage", (e: StorageEvent): void => {
-      e.key === STORAGE_KEY && setMode(e.newValue as ColorSchemePreference);
-    });
+    const handleStorage = (e: StorageEvent): void => {
+      if (e.key !== STORAGE_KEY) {
+        return;
+      }
+
+      if (e.newValue === "dark" || e.newValue === "light" || e.newValue === "system") {
+        setMode(e.newValue);
+        return;
+      }
+
+      setMode("system");
+    };
+
+    const handleClickOutside = (event: MouseEvent): void => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+
+    addEventListener("storage", handleStorage);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      removeEventListener("storage", handleStorage);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, mode);
-    updateDOM();
+    if (updateDOM) {
+      updateDOM();
+    }
   }, [mode]);
 
-  /** toggle mode */
-  const handleModeSwitch = () => {
-    const index = modes.indexOf(mode);
-    setMode(modes[(index + 1) % modes.length]);
+  const handleModeSelect = (nextMode: ColorSchemePreference) => {
+    setMode(nextMode);
+    setIsOpen(false);
   };
+
   return (
-    <button
-      suppressHydrationWarning
-      className={styles.switch}
-      onClick={handleModeSwitch}
-    />
+    <div ref={menuRef} className="absolute right-5 top-[70px] z-50">
+      <button
+        type="button"
+        className="rounded-md border border-neutral-300 bg-white px-3 py-1 text-sm font-semibold tracking-wide transition-colors hover:bg-neutral-100 dark:border-slate-600 dark:bg-slate-900 dark:hover:bg-slate-800"
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
+        {isMounted ? mode.charAt(0).toUpperCase() + mode.slice(1) : "System"}
+      </button>
+      {isOpen && (
+        <div className="absolute right-0 mt-2 min-w-28 rounded-md border border-neutral-300 bg-white p-1 shadow-lg dark:border-slate-600 dark:bg-slate-900">
+          {modes.map((themeMode) => (
+            <button
+              key={themeMode}
+              type="button"
+              className="block w-full rounded px-3 py-1 text-left text-sm capitalize hover:bg-neutral-100 dark:hover:bg-slate-800"
+              onClick={() => handleModeSelect(themeMode)}
+            >
+              {themeMode}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
