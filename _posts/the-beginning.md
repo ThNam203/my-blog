@@ -3,8 +3,8 @@ title: "Một khởi đầu mới của mình - The start of something new in me
 excerpt: "Lời mở đầu cho một con đường mới, một con đường mà mình muốn thử - It's my brief introduction about the beginning of me on the way to become a blogger/influencer"
 date: "2026-04-29T00:11:07.564Z"
 author:
-  name: Huỳnh Thành Nam
-  picture: "/assets/blog/me/my_first_avatar.jpg"
+    name: Huỳnh Thành Nam
+    picture: "/assets/blog/me/my_first_avatar.jpg"
 ---
 
 ## Đây là bài đăng đầu tiên của mình trong con đường viết lách, viết tùm lum, viết tràn lan.
@@ -21,8 +21,8 @@ Thử tìm một lối sống mới, một con người mới, một bầu trờ
 
 ## Vậy là con đường mới chính thức bắt đầu
 
-Hi vọng con đường mới này sẽ giúp mình có thêm nhiều trải nghiệm và kinh nghiệm mới, dù có là vui hay là buồn. Thật ra mình biết phong cách viết này sẽ không được nhiều người đọc, mà thật sự thì mình cũng không muốn quá nhiều người biết. Chỉ là mình mong muốn được giải toả những tâm trạng của mình. 
+Hi vọng con đường mới này sẽ giúp mình có thêm nhiều trải nghiệm và kinh nghiệm mới, dù có là vui hay là buồn. Thật ra mình biết phong cách viết này sẽ không được nhiều người đọc, mà thật sự thì mình cũng không muốn quá nhiều người biết. Chỉ là mình mong muốn được giải toả những tâm trạng của mình.
 
 "Trên đời này làm gì có đường, người ta đi mãi thì thành đường thôi" ~ Lỗ Tấn
 
-Và con đường này sẽ do mình bước đi, cầu chúc cho mọi thứ sẽ tốt đẹp, cả bạn đọc giả và cả mình. 
+Và con đường này sẽ do mình bước đi, cầu chúc cho mọi thứ sẽ tốt đẹp, cả bạn đọc giả và cả mình.

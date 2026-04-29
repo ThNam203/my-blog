@@ -3,8 +3,8 @@ title: "The start of something new in me"
 excerpt: "A short introduction to my new writing journey, where I share what I learn and how I grow."
 date: "2026-04-29T00:11:07.564Z"
 author:
-  name: Huỳnh Thành Nam
-  picture: "/assets/blog/me/my_first_avatar.jpg"
+    name: Huỳnh Thành Nam
+    picture: "/assets/blog/me/my_first_avatar.jpg"
 ---
 
 ## This is my very first post on my writing journey.

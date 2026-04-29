@@ -7,5 +7,5 @@ export const defaultLocale: Locale = "vi";
 export const localePrefix = "always";
 
 export function isValidLocale(value: string): value is Locale {
-  return locales.includes(value as Locale);
+    return locales.includes(value as Locale);
 }

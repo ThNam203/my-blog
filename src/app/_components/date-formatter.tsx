@@ -3,15 +3,17 @@ import { vi as viLocale, enUS } from "date-fns/locale";
 import { type Locale } from "@/i18n/config";
 
 type Props = {
-  dateString: string;
-  locale?: Locale;
+    dateString: string;
+    locale?: Locale;
 };
 
 const DateFormatter = ({ dateString, locale = "vi" }: Props) => {
-  const date = parseISO(dateString);
-  const dateLocale = locale === "vi" ? viLocale : enUS;
+    const date = parseISO(dateString);
+    const dateLocale = locale === "vi" ? viLocale : enUS;
 
-  return <time dateTime={dateString}>{format(date, "LLLL d, yyyy", { locale: dateLocale })}</time>;
+    return (
+        <time dateTime={dateString}>{format(date, "LLLL d, yyyy", { locale: dateLocale })}</time>
+    );
 };
 
 export default DateFormatter;

@@ -8,44 +8,48 @@ import { isValidLocale } from "@/i18n/config";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: Promise<{
-    locale: string;
-  }>;
+    params: Promise<{
+        locale: string;
+    }>;
 };
 
 export default async function Index({ params }: Props) {
-  const { locale } = await params;
-  if (!isValidLocale(locale)) {
-    notFound();
-  }
+    const { locale } = await params;
+    if (!isValidLocale(locale)) {
+        notFound();
+    }
 
-  const dictionary = getDictionary(locale);
-  const allPosts = getAllPosts(locale);
+    const dictionary = getDictionary(locale);
+    const allPosts = getAllPosts(locale);
 
-  const heroPost = allPosts[0];
-  const morePosts = allPosts.slice(1);
+    const heroPost = allPosts[0];
+    const morePosts = allPosts.slice(1);
 
-  if (!heroPost) {
-    return null;
-  }
+    if (!heroPost) {
+        return null;
+    }
 
-  return (
-    <main>
-      <Container>
-        <Intro heading={dictionary.ui.blogHeading} />
-        <HeroPost
-          title={heroPost.title}
-          coverImage={heroPost.coverImage}
-          date={heroPost.date}
-          author={heroPost.author}
-          slug={heroPost.slug}
-          excerpt={heroPost.excerpt}
-          locale={locale}
-        />
-        {morePosts.length > 0 && (
-          <MoreStories posts={morePosts} locale={locale} title={dictionary.ui.moreStories} />
-        )}
-      </Container>
-    </main>
-  );
+    return (
+        <main>
+            <Container>
+                <Intro heading={dictionary.ui.blogHeading} />
+                <HeroPost
+                    title={heroPost.title}
+                    coverImage={heroPost.coverImage}
+                    date={heroPost.date}
+                    author={heroPost.author}
+                    slug={heroPost.slug}
+                    excerpt={heroPost.excerpt}
+                    locale={locale}
+                />
+                {morePosts.length > 0 && (
+                    <MoreStories
+                        posts={morePosts}
+                        locale={locale}
+                        title={dictionary.ui.moreStories}
+                    />
+                )}
+            </Container>
+        </main>
+    );
 }

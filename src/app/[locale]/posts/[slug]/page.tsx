@@ -12,87 +12,87 @@ import { isValidLocale } from "@/i18n/config";
 import { WEB_DEFAULT_URL } from "@/lib/constants";
 
 type Params = {
-  params: Promise<{
-    slug: string;
-    locale: string;
-  }>;
+    params: Promise<{
+        slug: string;
+        locale: string;
+    }>;
 };
 
 export default async function Post(props: Params) {
-  const params = await props.params;
-  if (!isValidLocale(params.locale)) {
-    return notFound();
-  }
+    const params = await props.params;
+    if (!isValidLocale(params.locale)) {
+        return notFound();
+    }
 
-  const post = getPostBySlug(params.slug, params.locale);
+    const post = getPostBySlug(params.slug, params.locale);
 
-  if (!post) {
-    return notFound();
-  }
+    if (!post) {
+        return notFound();
+    }
 
-  const dictionary = getDictionary(params.locale);
-  const content = await markdownToHtml(post.content || "");
+    const dictionary = getDictionary(params.locale);
+    const content = await markdownToHtml(post.content || "");
 
-  return (
-    <main>
-      <Alert
-        textPrefix={dictionary.ui.alertTextPrefix}
-        linkLabel={dictionary.ui.alertLinkLabel}
-        websiteUrl={WEB_DEFAULT_URL}
-      />
-      <Container>
-        <Header locale={params.locale} title={dictionary.ui.headerTitle} />
-        <article className="mb-32">
-          <PostHeader
-            title={post.title}
-            coverImage={post.coverImage}
-            date={post.date}
-            author={post.author}
-            locale={params.locale}
-          />
-          <PostBody content={content} />
-        </article>
-      </Container>
-    </main>
-  );
+    return (
+        <main>
+            <Alert
+                textPrefix={dictionary.ui.alertTextPrefix}
+                linkLabel={dictionary.ui.alertLinkLabel}
+                websiteUrl={WEB_DEFAULT_URL}
+            />
+            <Container>
+                <Header locale={params.locale} title={dictionary.ui.headerTitle} />
+                <article className="mb-32">
+                    <PostHeader
+                        title={post.title}
+                        coverImage={post.coverImage}
+                        date={post.date}
+                        author={post.author}
+                        locale={params.locale}
+                    />
+                    <PostBody content={content} />
+                </article>
+            </Container>
+        </main>
+    );
 }
 
 export async function generateMetadata(props: Params): Promise<Metadata> {
-  const params = await props.params;
-  if (!isValidLocale(params.locale)) {
-    return {};
-  }
+    const params = await props.params;
+    if (!isValidLocale(params.locale)) {
+        return {};
+    }
 
-  const post = getPostBySlug(params.slug, params.locale);
-  if (!post) {
-    return notFound();
-  }
+    const post = getPostBySlug(params.slug, params.locale);
+    if (!post) {
+        return notFound();
+    }
 
-  const dictionary = getDictionary(params.locale);
-  const title = `${post.title} | ${dictionary.metadata.siteName}`;
-  const ogImageUrl = post.ogImage?.url ?? post.coverImage;
+    const dictionary = getDictionary(params.locale);
+    const title = `${post.title} | ${dictionary.metadata.siteName}`;
+    const ogImageUrl = post.ogImage?.url ?? post.coverImage;
 
-  return {
-    title,
-    openGraph: {
-      title,
-      ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
-    },
-  };
+    return {
+        title,
+        openGraph: {
+            title,
+            ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
+        },
+    };
 }
 
 export async function generateStaticParams() {
-  const viPosts = getAllPosts("vi");
-  const enPosts = getAllPosts("en");
+    const viPosts = getAllPosts("vi");
+    const enPosts = getAllPosts("en");
 
-  return [
-    ...viPosts.map((post) => ({
-      locale: "vi",
-      slug: post.slug,
-    })),
-    ...enPosts.map((post) => ({
-      locale: "en",
-      slug: post.slug,
-    })),
-  ];
+    return [
+        ...viPosts.map((post) => ({
+            locale: "vi",
+            slug: post.slug,
+        })),
+        ...enPosts.map((post) => ({
+            locale: "en",
+            slug: post.slug,
+        })),
+    ];
 }
