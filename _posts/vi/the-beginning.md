@@ -2,6 +2,8 @@
 title: "Một khởi đầu mới của mình - The start of something new in me!"
 excerpt: "Lời mở đầu cho một con đường mới, một con đường mà mình muốn thử - It's my brief introduction about the beginning of me on the way to become a blogger/influencer"
 date: "2026-04-29T00:11:07.564Z"
+categories:
+    - my life
 author:
     name: Huỳnh Thành Nam
     picture: "/assets/blog/me/my_first_avatar.jpg"

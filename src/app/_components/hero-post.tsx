@@ -4,9 +4,11 @@ import { type Locale } from "@/i18n/config";
 import { type Author } from "@/interfaces/author";
 import Link from "next/link";
 import DateFormatter from "./date-formatter";
+import { PostCategories } from "./post-categories";
 
 type Props = {
     title: string;
+    categories: string[];
     coverImage?: string;
     date: string;
     excerpt: string;
@@ -15,7 +17,7 @@ type Props = {
     locale: Locale;
 };
 
-export function HeroPost({ title, coverImage, date, excerpt, author, slug, locale }: Props) {
+export function HeroPost({ title, categories, coverImage, date, excerpt, author, slug, locale }: Props) {
     return (
         <section>
             {coverImage ? (
@@ -25,6 +27,7 @@ export function HeroPost({ title, coverImage, date, excerpt, author, slug, local
             ) : null}
             <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
                 <div>
+                    <PostCategories categories={categories} locale={locale} />
                     <h3 className="mb-4 text-4xl lg:text-5xl leading-tight">
                         <Link href={`/${locale}/posts/${slug}`} className="hover:underline">
                             {title}

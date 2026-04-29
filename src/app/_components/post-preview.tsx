@@ -4,9 +4,11 @@ import Link from "next/link";
 import Avatar from "./avatar";
 import CoverImage from "./cover-image";
 import DateFormatter from "./date-formatter";
+import { PostCategories } from "./post-categories";
 
 type Props = {
     title: string;
+    categories: string[];
     coverImage?: string;
     date: string;
     excerpt: string;
@@ -15,7 +17,7 @@ type Props = {
     locale: Locale;
 };
 
-export function PostPreview({ title, coverImage, date, excerpt, author, slug, locale }: Props) {
+export function PostPreview({ title, categories, coverImage, date, excerpt, author, slug, locale }: Props) {
     return (
         <div>
             {coverImage ? (
@@ -23,6 +25,7 @@ export function PostPreview({ title, coverImage, date, excerpt, author, slug, lo
                     <CoverImage slug={slug} title={title} src={coverImage} locale={locale} />
                 </div>
             ) : null}
+            <PostCategories categories={categories} locale={locale} />
             <h3 className="text-3xl mb-3 leading-snug">
                 <Link href={`/${locale}/posts/${slug}`} className="hover:underline">
                     {title}

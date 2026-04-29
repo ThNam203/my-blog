@@ -4,16 +4,18 @@ import DateFormatter from "./date-formatter";
 import { PostTitle } from "@/app/_components/post-title";
 import { type Author } from "@/interfaces/author";
 import { type Locale } from "@/i18n/config";
+import { PostCategories } from "./post-categories";
 
 type Props = {
     title: string;
+    categories: string[];
     coverImage?: string;
     date: string;
     author: Author;
     locale: Locale;
 };
 
-export function PostHeader({ title, coverImage, date, author, locale }: Props) {
+export function PostHeader({ title, categories, coverImage, date, author, locale }: Props) {
     return (
         <>
             <PostTitle>{title}</PostTitle>
@@ -29,6 +31,7 @@ export function PostHeader({ title, coverImage, date, author, locale }: Props) {
                 <div className="block md:hidden mb-6">
                     <Avatar name={author.name} picture={author.picture} />
                 </div>
+                <PostCategories categories={categories} locale={locale} />
                 <div className="mb-6 text-lg">
                     <DateFormatter dateString={date} locale={locale} />
                 </div>

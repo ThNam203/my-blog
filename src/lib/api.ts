@@ -7,6 +7,25 @@ import { join } from "path";
 const postsDirectory = join(process.cwd(), "_posts");
 const localizedPostsDirectory = (locale: Locale) => join(postsDirectory, locale);
 
+function normalizeCategories(value: unknown): string[] {
+    if (!value) {
+        return [];
+    }
+
+    if (Array.isArray(value)) {
+        return value
+            .filter((category): category is string => typeof category === "string")
+            .map((category) => category.trim())
+            .filter(Boolean);
+    }
+
+    if (typeof value === "string" && value.trim()) {
+        return [value.trim()];
+    }
+
+    return [];
+}
+
 function resolvePostsDirectory(locale: Locale) {
     const localeDir = localizedPostsDirectory(locale);
     if (fs.existsSync(localeDir)) {
@@ -38,7 +57,12 @@ export function getPostBySlug(slug: string, locale: string = defaultLocale) {
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
 
-    return { ...data, slug: realSlug, content } as Post;
+    return {
+        ...data,
+        categories: normalizeCategories(data.categories),
+        slug: realSlug,
+        content,
+    } as Post;
 }
 
 export function getAllPosts(locale: string = defaultLocale): Post[] {
@@ -49,4 +73,22 @@ export function getAllPosts(locale: string = defaultLocale): Post[] {
         // sort posts by date in descending order
         .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
     return posts;
+}
+
+export function getAllCategories(locale: string = defaultLocale): string[] {
+    const posts = getAllPosts(locale);
+    const seen = new Set<string>();
+    for (const post of posts) {
+        for (const cat of post.categories) {
+            seen.add(cat);
+        }
+    }
+    return Array.from(seen).sort();
+}
+
+export function getPostsByCategory(category: string, locale: string = defaultLocale): Post[] {
+    const normalized = category.toLowerCase();
+    return getAllPosts(locale).filter((post) =>
+        post.categories.some((c) => c.toLowerCase() === normalized),
+    );
 }

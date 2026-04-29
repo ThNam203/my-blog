@@ -22,6 +22,7 @@ export function MoreStories({ posts, locale, title }: Props) {
                     <PostPreview
                         key={post.slug}
                         title={post.title}
+                        categories={post.categories}
                         coverImage={post.coverImage}
                         date={post.date}
                         author={post.author}

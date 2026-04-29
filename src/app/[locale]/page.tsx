@@ -35,6 +35,7 @@ export default async function Index({ params }: Props) {
                 <Intro heading={dictionary.ui.blogHeading} />
                 <HeroPost
                     title={heroPost.title}
+                    categories={heroPost.categories}
                     coverImage={heroPost.coverImage}
                     date={heroPost.date}
                     author={heroPost.author}

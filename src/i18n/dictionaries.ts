@@ -12,6 +12,7 @@ type Dictionary = {
         moreStories: string;
         alertTextPrefix: string;
         alertLinkLabel: string;
+        postsInCategory: string;
         footerPrimaryCta: string;
         footerSecondaryCta: string;
         languageLabel: string;
@@ -36,6 +37,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             moreStories: "Bài viết khác",
             alertTextPrefix: "Đây là blog của mình. Bạn cũng có thể xem thêm",
             alertLinkLabel: "website Let's Live",
+            postsInCategory: "Bài viết trong chủ đề:",
             footerPrimaryCta: "Ghé thăm website Let's Live của mình",
             footerSecondaryCta: "Theo dõi mình trên Instagram",
             languageLabel: "Ngôn ngữ",
@@ -58,6 +60,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             moreStories: "More Stories",
             alertTextPrefix: "This is my blog. You can also check out my",
             alertLinkLabel: "Let's Live website",
+            postsInCategory: "Posts in:",
             footerPrimaryCta: "Visit my Let's Live website",
             footerSecondaryCta: "Follow me on Instagram",
             languageLabel: "Language",
