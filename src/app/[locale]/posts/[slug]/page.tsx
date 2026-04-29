@@ -7,6 +7,7 @@ import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
+import { CommentSection } from "@/app/_components/comments/comment-section";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
 import { WEB_DEFAULT_URL } from "@/lib/constants";
@@ -53,6 +54,7 @@ export default async function Post(props: Params) {
                     />
                     <PostBody content={content} />
                 </article>
+                <CommentSection postSlug={params.slug} locale={params.locale} />
             </Container>
         </main>
     );
