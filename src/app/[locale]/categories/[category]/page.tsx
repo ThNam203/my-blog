@@ -37,7 +37,6 @@ export default async function CategoryPage({ params }: Props) {
     return (
         <main>
             <Container>
-                <Header locale={locale} title={dictionary.ui.headerTitle} />
                 <h2 className="mb-8 text-4xl md:text-6xl font-bold tracking-tighter leading-tight">
                     {dictionary.ui.postsInCategory}{" "}
                     <span className="capitalize">{categoryName}</span>

@@ -77,7 +77,7 @@ export function CommentList({
             )}
 
             {currentUserId && (
-                <div className="mb-10">
+                <div className="mb-8">
                     <CommentForm
                         postSlug={postSlug}
                         locale={locale}

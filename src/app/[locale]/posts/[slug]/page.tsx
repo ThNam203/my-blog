@@ -34,7 +34,6 @@ export default async function Post(props: Params) {
     return (
         <main>
             <Container>
-                <Header locale={params.locale} title={dictionary.ui.headerTitle} />
                 <article className="mb-32">
                     <PostHeader
                         title={post.title}

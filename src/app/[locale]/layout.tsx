@@ -63,7 +63,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 linkLabel={dictionary.ui.alertLinkLabel}
                 sideWebsiteUrl={LETSLIVE_URL}
             />
-            <header className="container mx-auto flex items-center justify-between">
+            <header className="md:container mx-auto px-4 md:px-0 flex items-center justify-between">
                 <Intro heading={dictionary.ui.blogHeading} />
                 <div className="relative flex items-center gap-2">
                     <HeaderSiteMenu
@@ -90,7 +90,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                     />
                 </div>
             </header>
-            <main id="site-main" className={cn(MUSIC_TRACKS.length > 0 && "pb-28")}>
+            <main 
+                id="site-main" 
+                className="pb-8 px-4 md:px-0"
+            >
                 {children}
             </main>
             {MUSIC_TRACKS.length > 0 && (
