@@ -5,6 +5,7 @@ import {
     useId,
     useRef,
     useState,
+    type CSSProperties,
     type ChangeEvent,
 } from "react";
 import type { MusicTrack } from "@/lib/music-tracks";
@@ -51,6 +52,12 @@ export function ExpandedPlayerBar({
     const [playlistOpen, setPlaylistOpen] = useState(false);
     const playlistWrapRef = useRef<HTMLDivElement | null>(null);
     const listTitleId = useId();
+    const progressPercent = safeDuration
+        ? Math.min(100, Math.max(0, (currentTime / safeDuration) * 100))
+        : 0;
+    const scrubberStyle = {
+        "--music-progress": `${progressPercent}%`,
+    } as CSSProperties;
 
     const closePlaylist = useCallback(() => setPlaylistOpen(false), []);
 
@@ -219,9 +226,9 @@ export function ExpandedPlayerBar({
                         }
                         onChange={onSeek}
                         disabled={!safeDuration}
+                        style={scrubberStyle}
                         className={cn(
                             "music-player-range h-1 flex-1 cursor-pointer appearance-none rounded-full",
-                            "bg-neutral-300 dark:bg-slate-600",
                             "accent-neutral-900 dark:accent-white",
                         )}
                         aria-label={track.title}

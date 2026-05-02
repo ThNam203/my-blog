@@ -151,7 +151,15 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                 onTimeUpdate={onTimeUpdate}
                 onLoadedMetadata={onLoadedMetadata}
                 onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
+                onPause={() => {
+                    // Reaching the end pauses the element before `ended` fires; keep
+                    // `isPlaying` true so the track-advance effect still calls `play()`.
+                    const el = audioRef.current;
+                    if (el?.ended) {
+                        return;
+                    }
+                    setIsPlaying(false);
+                }}
             />
             {minimized ? (
                 <MinimizedPlayerFab

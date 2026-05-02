@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 /* Bottom music player scrubber */
+.music-player-range {
+    --music-progress: 0%;
+    --music-played: rgb(107 114 128);
+    --music-unplayed: rgb(212 212 212);
+    background: linear-gradient(
+        to right,
+        var(--music-played) 0%,
+        var(--music-played) var(--music-progress),
+        var(--music-unplayed) var(--music-progress),
+        var(--music-unplayed) 100%
+    );
+}
+
+.dark .music-player-range {
+    --music-played: rgb(148 163 184);
+    --music-unplayed: rgb(71 85 105);
+}
+
 .music-player-range::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
