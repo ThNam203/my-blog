@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
+import cn from "classnames";
 import { notFound } from "next/navigation";
 import Alert from "@/app/_components/alert";
 import Footer from "@/app/_components/footer";
+import { SiteMusicPlayer } from "@/app/_components/site-music-player";
 import { ThemeSwitcher } from "@/app/_components/theme-switcher";
 import { LocaleSwitcher } from "@/app/_components/locale-switcher";
 import { LETSLIVE_URL, WEB_DEFAULT_INSTAGRAM_URL } from "@/lib/constants";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale, type Locale } from "@/i18n/config";
+import { MUSIC_TRACKS } from "@/lib/music-tracks";
 import { Intro } from "../_components/intro";
 
 type Props = {
@@ -67,7 +70,24 @@ export default async function LocaleLayout({ children, params }: Props) {
                 />
                 </div>
             </header>
-            <main>{children}</main>
+            <main id="site-main" className={cn(MUSIC_TRACKS.length > 0 && "pb-28")}>
+                {children}
+            </main>
+            {MUSIC_TRACKS.length > 0 && (
+                <SiteMusicPlayer
+                    tracks={MUSIC_TRACKS}
+                    labels={{
+                        play: dictionary.ui.musicPlay,
+                        pause: dictionary.ui.musicPause,
+                        expand: dictionary.ui.musicExpand,
+                        collapse: dictionary.ui.musicCollapse,
+                        previous: dictionary.ui.musicPrevious,
+                        next: dictionary.ui.musicNext,
+                        minimize: dictionary.ui.musicMinimize,
+                        restore: dictionary.ui.musicRestore,
+                    }}
+                />
+            )}
             <Footer
                 description={dictionary.metadata.description}
                 sideWebsiteUrl={LETSLIVE_URL}

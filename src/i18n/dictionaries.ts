@@ -21,6 +21,14 @@ type Dictionary = {
         themeSystem: string;
         themeDark: string;
         themeLight: string;
+        musicPlay: string;
+        musicPause: string;
+        musicExpand: string;
+        musicCollapse: string;
+        musicPrevious: string;
+        musicNext: string;
+        musicMinimize: string;
+        musicRestore: string;
     };
 };
 
@@ -46,6 +54,14 @@ const dictionaries: Record<Locale, Dictionary> = {
             themeSystem: "Hệ thống",
             themeDark: "Tối",
             themeLight: "Sáng",
+            musicPlay: "Phát",
+            musicPause: "Tạm dừng",
+            musicExpand: "Mở rộng trình phát nhạc",
+            musicCollapse: "Thu gọn trình phát nhạc",
+            musicPrevious: "Bài trước",
+            musicNext: "Bài sau",
+            musicMinimize: "Thu nhỏ trình phát xuống góc màn hình",
+            musicRestore: "Mở lại trình phát nhạc",
         },
     },
     en: {
@@ -69,6 +85,14 @@ const dictionaries: Record<Locale, Dictionary> = {
             themeSystem: "System",
             themeDark: "Dark",
             themeLight: "Light",
+            musicPlay: "Play",
+            musicPause: "Pause",
+            musicExpand: "Expand music player",
+            musicCollapse: "Collapse music player",
+            musicPrevious: "Previous track",
+            musicNext: "Next track",
+            musicMinimize: "Minimize player to corner",
+            musicRestore: "Restore music player",
         },
     },
 };
