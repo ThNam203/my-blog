@@ -1,7 +1,6 @@
 "use client";
 
 import cn from "classnames";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { MusicTrack } from "@/lib/music-tracks";
 
@@ -182,23 +181,13 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                             "ring-2 ring-neutral-900 ring-offset-2 ring-offset-neutral-100 dark:ring-white dark:ring-offset-[#121212]",
                     )}
                 >
-                    {track.artworkUrl ? (
-                        <Image
-                            src={track.artworkUrl}
-                            alt=""
-                            width={112}
-                            height={112}
-                            className="h-full w-full object-cover"
-                        />
-                    ) : (
-                        <div
-                            className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-400
-                            to-neutral-600 dark:from-slate-600 dark:to-slate-800"
-                            aria-hidden
-                        >
-                            <MusicGlyph className="h-7 w-7 text-white/90" />
-                        </div>
-                    )}
+                    <div
+                        className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-400
+                        to-neutral-600 dark:from-slate-600 dark:to-slate-800"
+                        aria-hidden
+                    >
+                        <MusicGlyph className="h-7 w-7 text-white/90" />
+                    </div>
                 </button>
             ) : (
                 <div
@@ -220,23 +209,13 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                                 artSize,
                             )}
                         >
-                            {track.artworkUrl ? (
-                                <Image
-                                    src={track.artworkUrl}
-                                    alt=""
-                                    width={256}
-                                    height={256}
-                                    className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                <div
-                                    className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-400
-                                    to-neutral-600 dark:from-slate-600 dark:to-slate-800"
-                                    aria-hidden
-                                >
-                                    <MusicGlyph className="h-1/2 w-1/2 text-white/90" />
-                                </div>
-                            )}
+                            <div
+                                className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-400
+                                to-neutral-600 dark:from-slate-600 dark:to-slate-800"
+                                aria-hidden
+                            >
+                                <MusicGlyph className="h-1/2 w-1/2 text-white/90" />
+                            </div>
                         </div>
 
                         <div

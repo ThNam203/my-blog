@@ -5,8 +5,6 @@ export type MusicTrack = {
     src: string;
     title: string;
     artist: string;
-    /** Optional square image in `public/` */
-    artworkUrl?: string;
 };
 
 /**
@@ -15,15 +13,18 @@ export type MusicTrack = {
  */
 export const MUSIC_TRACKS: MusicTrack[] = [
     {
-        src: "/music/demo.wav",
-        title: "Demo — A4 tone",
-        artist: WEB_DEFAULT_AUTHOR,
-        artworkUrl: "/assets/blog/me/my_first_avatar.jpg",
+        src: "/music/nang_am_trong_tim.mp3",
+        title: "Nắng ấm trong tim",
+        artist: "DuongG, Dadeon",
     },
     {
-        src: "/music/demo-2.wav",
-        title: "Demo — C5 tone",
-        artist: WEB_DEFAULT_AUTHOR,
-        artworkUrl: "/assets/blog/me/my_first_avatar.jpg",
+        src: "/music/to_mau.mp3",
+        title: "Tô màu",
+        artist: "XIN",
     },
+    {
+        src: "/music/rang_khon.mp3",
+        title: "Răng khôn",
+        artist: "Phí Phương Anh, RIN9",
+    }
 ];
