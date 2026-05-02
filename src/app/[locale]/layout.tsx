@@ -4,7 +4,7 @@ import Alert from "@/app/_components/alert";
 import Footer from "@/app/_components/footer";
 import { ThemeSwitcher } from "@/app/_components/theme-switcher";
 import { LocaleSwitcher } from "@/app/_components/locale-switcher";
-import { WEB_DEFAULT_INSTAGRAM_URL, WEB_DEFAULT_URL } from "@/lib/constants";
+import { LETSLIVE_URL, WEB_DEFAULT_INSTAGRAM_URL } from "@/lib/constants";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { Intro } from "../_components/intro";
@@ -48,7 +48,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <Alert
                 textPrefix={dictionary.ui.alertTextPrefix}
                 linkLabel={dictionary.ui.alertLinkLabel}
-                websiteUrl={WEB_DEFAULT_URL}
+                sideWebsiteUrl={LETSLIVE_URL}
             />
             <header className="container mx-auto flex items-center justify-between">
                 <Intro heading={dictionary.ui.blogHeading} />
@@ -70,7 +70,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main>{children}</main>
             <Footer
                 description={dictionary.metadata.description}
-                websiteUrl={WEB_DEFAULT_URL}
+                sideWebsiteUrl={LETSLIVE_URL}
                 instagramUrl={WEB_DEFAULT_INSTAGRAM_URL}
                 primaryCta={dictionary.ui.footerPrimaryCta}
                 secondaryCta={dictionary.ui.footerSecondaryCta}

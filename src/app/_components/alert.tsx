@@ -3,10 +3,10 @@ import Container from "@/app/_components/container";
 type Props = {
     textPrefix: string;
     linkLabel: string;
-    websiteUrl: string;
+    sideWebsiteUrl: string;
 };
 
-const Alert = ({ textPrefix, linkLabel, websiteUrl }: Props) => {
+const Alert = ({ textPrefix, linkLabel, sideWebsiteUrl }: Props) => {
     return (
         <div className="border-b dark:bg-slate-800 bg-neutral-800 border-neutral-800 text-white">
             <Container>
@@ -14,7 +14,7 @@ const Alert = ({ textPrefix, linkLabel, websiteUrl }: Props) => {
                     <>
                         {textPrefix}{" "}
                         <a
-                            href={websiteUrl}
+                            href={sideWebsiteUrl}
                             target="_blank"
                             rel="noreferrer"
                             className="underline hover:text-blue-600 duration-200 transition-colors"
