@@ -17,6 +17,7 @@
         "next": "latest",
         "react": "^19",
         "react-dom": "^19",
+        "react-toastify": "^11.1.0",
         "remark": "^15.0.1",
         "remark-html": "^16.0.1"
     },

@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useTransition } from "react";
+import { toast } from "react-toastify";
 import { addComment } from "@/lib/actions/comments";
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
     placeholder: string;
     postLabel: string;
     postingLabel: string;
+    postedSuccessLabel: string;
     cancelLabel: string;
     onSuccess?: () => void;
 };
@@ -21,10 +24,11 @@ export function CommentForm({
     placeholder,
     postLabel,
     postingLabel,
+    postedSuccessLabel,
     cancelLabel,
     onSuccess,
 }: Props) {
-    const [error, setError] = useState("");
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -32,14 +36,15 @@ export function CommentForm({
         e.preventDefault();
         const body = textareaRef.current?.value.trim() ?? "";
         if (!body) return;
-        setError("");
 
         startTransition(async () => {
             const result = await addComment(postSlug, body, parentId, locale);
             if (result.error) {
-                setError(result.error);
+                toast.error(result.error);
             } else {
                 if (textareaRef.current) textareaRef.current.value = "";
+                toast.success(postedSuccessLabel);
+                router.refresh();
                 onSuccess?.();
             }
         });
@@ -55,7 +60,6 @@ export function CommentForm({
                 rows={3}
                 className="w-full resize-none rounded-lg border border-neutral-300 bg-transparent px-4 py-2 text-sm outline-none focus:border-neutral-500 dark:border-neutral-600 dark:focus:border-neutral-400"
             />
-            {error && <p className="text-xs text-red-500">{error}</p>}
             <div className="flex justify-end gap-2">
                 {onSuccess && (
                     <button

@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { defaultLocale, isValidLocale } from "@/i18n/config";
 
 import "./globals.css";
+import { SiteToastContainer } from "@/app/_components/site-toast-container";
 
 const inter = Inter({ subsets: ["latin"] });
 const THEME_STORAGE_KEY = "nam-blog-theme";
@@ -67,6 +68,7 @@ export default async function RootLayout({
             </head>
             <body className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}>
                 {children}
+                <SiteToastContainer />
                 <Analytics />
                 <SpeedInsights />
             </body>

@@ -35,6 +35,7 @@ export async function CommentSection({ postSlug, locale }: Props) {
             commentsReplyPlaceholder={dictionary.ui.commentsReplyPlaceholder}
             commentsPost={dictionary.ui.commentsPost}
             commentsPosting={dictionary.ui.commentsPosting}
+            commentsPostedSuccess={dictionary.ui.commentsPostedSuccess}
             commentsCancel={dictionary.ui.commentsCancel}
             authModal={getAuthModalLabels(dictionary)}
             commentsAnonymous={dictionary.ui.commentsAnonymous}

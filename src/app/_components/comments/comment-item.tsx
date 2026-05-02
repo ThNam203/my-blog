@@ -15,6 +15,7 @@ type Props = {
     replyPlaceholderTemplate: string;
     postLabel: string;
     postingLabel: string;
+    postedSuccessLabel: string;
     cancelLabel: string;
     anonymousLabel: string;
     replyLabel: string;
@@ -33,6 +34,7 @@ export function CommentItem({
     replyPlaceholderTemplate,
     postLabel,
     postingLabel,
+    postedSuccessLabel,
     cancelLabel,
     anonymousLabel,
     replyLabel,
@@ -122,9 +124,10 @@ export function CommentItem({
                         locale={locale}
                         parentId={comment.id}
                         placeholder={replyPlaceholderTemplate.replaceAll("{name}", displayName)}
-                        postLabel={postLabel}
-                        postingLabel={postingLabel}
-                        cancelLabel={cancelLabel}
+                            postLabel={postLabel}
+                            postingLabel={postingLabel}
+                            postedSuccessLabel={postedSuccessLabel}
+                            cancelLabel={cancelLabel}
                         onSuccess={() => setShowReplyForm(false)}
                     />
                 </div>

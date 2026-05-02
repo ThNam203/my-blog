@@ -13,14 +13,30 @@ function dictForLocale(locale: string) {
 
 export async function getComments(postSlug: string): Promise<Comment[]> {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    const { data: rows, error } = await supabase
         .from("comments")
-        .select("*, profiles(display_name)")
+        .select("*")
         .eq("post_slug", postSlug)
         .order("created_at", { ascending: true });
 
-    if (error) return [];
-    return (data ?? []) as Comment[];
+    if (error || !rows?.length) {
+        return [];
+    }
+
+    const userIds = [...new Set(rows.map((r) => r.user_id))];
+    const { data: profileRows } = await supabase
+        .from("profiles")
+        .select("id, display_name")
+        .in("id", userIds);
+
+    const profileByUserId = new Map(
+        (profileRows ?? []).map((p) => [p.id, { display_name: p.display_name }]),
+    );
+
+    return rows.map((row) => ({
+        ...row,
+        profiles: profileByUserId.get(row.user_id) ?? null,
+    })) as Comment[];
 }
 
 export async function addComment(

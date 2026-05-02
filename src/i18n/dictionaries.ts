@@ -50,6 +50,7 @@ export type Dictionary = {
         commentsReplyPlaceholder: string;
         commentsPost: string;
         commentsPosting: string;
+        commentsPostedSuccess: string;
         commentsCancel: string;
         headerMenuOpenAria: string;
         headerMenuTheme: string;
@@ -165,6 +166,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             commentsReplyPlaceholder: "Trả lời {name}…",
             commentsPost: "Đăng",
             commentsPosting: "Đang đăng…",
+            commentsPostedSuccess: "Đã đăng bình luận.",
             commentsCancel: "Hủy",
             headerMenuOpenAria: "Mở menu trang",
             headerMenuTheme: "Giao diện",
@@ -243,6 +245,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             commentsReplyPlaceholder: "Reply to {name}…",
             commentsPost: "Post",
             commentsPosting: "Posting…",
+            commentsPostedSuccess: "Comment posted.",
             commentsCancel: "Cancel",
             headerMenuOpenAria: "Open site menu",
             headerMenuTheme: "Theme",

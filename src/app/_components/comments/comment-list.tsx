@@ -21,6 +21,7 @@ type Props = {
     commentsReplyPlaceholder: string;
     commentsPost: string;
     commentsPosting: string;
+    commentsPostedSuccess: string;
     commentsCancel: string;
     authModal: AuthModalLabels;
     commentsAnonymous: string;
@@ -44,6 +45,7 @@ export function CommentList({
     commentsReplyPlaceholder,
     commentsPost,
     commentsPosting,
+    commentsPostedSuccess,
     commentsCancel,
     authModal,
     commentsAnonymous,
@@ -84,6 +86,7 @@ export function CommentList({
                         placeholder={commentsWritePlaceholder}
                         postLabel={commentsPost}
                         postingLabel={commentsPosting}
+                        postedSuccessLabel={commentsPostedSuccess}
                         cancelLabel={commentsCancel}
                     />
                 </div>
@@ -105,6 +108,7 @@ export function CommentList({
                             replyPlaceholderTemplate={commentsReplyPlaceholder}
                             postLabel={commentsPost}
                             postingLabel={commentsPosting}
+                            postedSuccessLabel={commentsPostedSuccess}
                             cancelLabel={commentsCancel}
                             anonymousLabel={commentsAnonymous}
                             replyLabel={commentsReply}
