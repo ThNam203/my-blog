@@ -1,8 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { defaultLocale, isValidLocale } from "@/i18n/config";
+
+const PUBLIC_FILE = /\.[^/]+$/;
 
 export async function middleware(request: NextRequest) {
-    let supabaseResponse = NextResponse.next({ request });
+    const { pathname } = request.nextUrl;
+
+    if (
+        pathname.startsWith("/_next") ||
+        pathname.startsWith("/api") ||
+        pathname.startsWith("/favicon") ||
+        pathname === "/feed.xml" ||
+        PUBLIC_FILE.test(pathname)
+    ) {
+        return NextResponse.next();
+    }
+
+    let response = NextResponse.next({ request });
 
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,9 +31,9 @@ export async function middleware(request: NextRequest) {
                     cookiesToSet.forEach(({ name, value }) =>
                         request.cookies.set(name, value),
                     );
-                    supabaseResponse = NextResponse.next({ request });
+                    response = NextResponse.next({ request });
                     cookiesToSet.forEach(({ name, value, options }) =>
-                        supabaseResponse.cookies.set(name, value, options),
+                        response.cookies.set(name, value, options),
                     );
                 },
             },
@@ -27,7 +42,27 @@ export async function middleware(request: NextRequest) {
 
     await supabase.auth.getUser();
 
-    return supabaseResponse;
+    const segments = pathname.split("/").filter(Boolean);
+    const firstSegment = segments[0];
+
+    if (firstSegment && isValidLocale(firstSegment)) {
+        response.cookies.set("NEXT_LOCALE", firstSegment);
+        return response;
+    }
+
+    if (pathname.startsWith("/auth/callback")) {
+        response.cookies.set("NEXT_LOCALE", defaultLocale);
+        return response;
+    }
+
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
+    const redirectResponse = NextResponse.redirect(redirectUrl);
+    response.cookies.getAll().forEach((c) => {
+        redirectResponse.cookies.set(c.name, c.value);
+    });
+    redirectResponse.cookies.set("NEXT_LOCALE", defaultLocale);
+    return redirectResponse;
 }
 
 export const config = {

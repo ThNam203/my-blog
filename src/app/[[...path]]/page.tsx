@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { defaultLocale, isValidLocale } from "@/i18n/config";
 
 type Props = {
@@ -12,7 +12,7 @@ export default async function PathPrefixRedirectPage({ params }: Props) {
     const [firstSegment] = path;
 
     if (firstSegment && isValidLocale(firstSegment)) {
-        redirect(`/${path.join("/")}`);
+        notFound();
     }
 
     const suffix = path.length > 0 ? `/${path.join("/")}` : "";

@@ -57,7 +57,7 @@ export function LocaleSwitcher({ locale, vietnameseLabel, englishLabel }: Props)
     const languageLabel = locale === "vi" ? vietnameseLabel : englishLabel;
 
     return (
-        <div ref={menuRef} className="absolute right-28 top-[70px] z-50">
+        <div ref={menuRef}>
             <button
                 type="button"
                 className="rounded-md border border-neutral-300 bg-white px-3 py-1 text-sm font-semibold

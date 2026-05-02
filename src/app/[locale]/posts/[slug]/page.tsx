@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/api";
 import markdownToHtml from "@/lib/markdownToHtml";
-import Alert from "@/app/_components/alert";
 import Container from "@/app/_components/container";
 import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
@@ -10,8 +9,6 @@ import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
-import { WEB_DEFAULT_URL } from "@/lib/constants";
-
 type Params = {
     params: Promise<{
         slug: string;
@@ -36,11 +33,6 @@ export default async function Post(props: Params) {
 
     return (
         <main>
-            <Alert
-                textPrefix={dictionary.ui.alertTextPrefix}
-                linkLabel={dictionary.ui.alertLinkLabel}
-                websiteUrl={WEB_DEFAULT_URL}
-            />
             <Container>
                 <Header locale={params.locale} title={dictionary.ui.headerTitle} />
                 <article className="mb-32">

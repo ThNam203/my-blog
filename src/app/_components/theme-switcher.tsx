@@ -126,7 +126,7 @@ const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
     };
 
     return (
-        <div ref={menuRef} className="absolute right-5 top-[70px] z-50">
+        <div ref={menuRef}>
             <button
                 type="button"
                 className="rounded-md border border-neutral-300 bg-white px-3 py-1 text-sm font-semibold
@@ -172,8 +172,6 @@ export const ThemeSwitcher = ({ labels }: Props) => {
     };
 
     return (
-        <>
-            <Switch labels={resolvedLabels} />
-        </>
+        <Switch labels={resolvedLabels} />
     );
 };
