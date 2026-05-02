@@ -92,7 +92,10 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
             return;
         }
         if (el.paused) {
-            void el.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+            void el
+                .play()
+                .then(() => setIsPlaying(true))
+                .catch(() => setIsPlaying(false));
         } else {
             el.pause();
             setIsPlaying(false);
@@ -175,7 +178,8 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                         "dark:border-slate-600 dark:bg-[#121212] dark:text-slate-100",
                         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
                         "focus-visible:outline-neutral-900 dark:focus-visible:outline-white",
-                        isPlaying && "ring-2 ring-neutral-900 ring-offset-2 ring-offset-neutral-100 dark:ring-white dark:ring-offset-[#121212]",
+                        isPlaying &&
+                            "ring-2 ring-neutral-900 ring-offset-2 ring-offset-neutral-100 dark:ring-white dark:ring-offset-[#121212]",
                     )}
                 >
                     {track.artworkUrl ? (
@@ -210,7 +214,12 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                             collapsed ? "py-2" : "py-3",
                         )}
                     >
-                        <div className={cn("relative shrink-0 overflow-hidden rounded bg-neutral-300 dark:bg-slate-700", artSize)}>
+                        <div
+                            className={cn(
+                                "relative shrink-0 overflow-hidden rounded bg-neutral-300 dark:bg-slate-700",
+                                artSize,
+                            )}
+                        >
                             {track.artworkUrl ? (
                                 <Image
                                     src={track.artworkUrl}
@@ -230,11 +239,20 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                             )}
                         </div>
 
-                        <div className={cn("min-w-0 flex-1", collapsed && "max-w-[50%] sm:max-w-none")}>
+                        <div
+                            className={cn(
+                                "min-w-0 flex-1",
+                                collapsed && "max-w-[50%] sm:max-w-none",
+                            )}
+                        >
                             {!collapsed && (
                                 <div className="mb-2 hidden min-w-0 sm:block">
-                                    <p className="truncate text-sm font-semibold tracking-tight">{track.title}</p>
-                                    <p className="truncate text-xs text-neutral-600 dark:text-slate-400">{track.artist}</p>
+                                    <p className="truncate text-sm font-semibold tracking-tight">
+                                        {track.title}
+                                    </p>
+                                    <p className="truncate text-xs text-neutral-600 dark:text-slate-400">
+                                        {track.artist}
+                                    </p>
                                 </div>
                             )}
                             {collapsed ? (
@@ -249,7 +267,9 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                                         min={0}
                                         max={safeDuration || 1}
                                         step="any"
-                                        value={safeDuration ? Math.min(currentTime, safeDuration) : 0}
+                                        value={
+                                            safeDuration ? Math.min(currentTime, safeDuration) : 0
+                                        }
                                         onChange={onSeek}
                                         disabled={!safeDuration}
                                         className={cn(
@@ -267,7 +287,9 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                             {!collapsed && (
                                 <div className="mt-1 min-w-0 sm:hidden">
                                     <p className="truncate text-sm font-semibold">{track.title}</p>
-                                    <p className="truncate text-xs text-neutral-600 dark:text-slate-400">{track.artist}</p>
+                                    <p className="truncate text-xs text-neutral-600 dark:text-slate-400">
+                                        {track.artist}
+                                    </p>
                                 </div>
                             )}
                         </div>
@@ -278,7 +300,10 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                                     <SkipBackGlyph />
                                 </IconButton>
                             )}
-                            <IconButton label={isPlaying ? labels.pause : labels.play} onClick={togglePlay}>
+                            <IconButton
+                                label={isPlaying ? labels.pause : labels.play}
+                                onClick={togglePlay}
+                            >
                                 {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
                             </IconButton>
                             {hasPlaylist && (
@@ -363,7 +388,15 @@ function SkipForwardGlyph() {
 
 function ChevronDownGlyph() {
     return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden
+        >
             <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
@@ -371,7 +404,15 @@ function ChevronDownGlyph() {
 
 function ChevronUpGlyph() {
     return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden
+        >
             <path d="M18 15l-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
@@ -379,7 +420,15 @@ function ChevronUpGlyph() {
 
 function CloseGlyph() {
     return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden
+        >
             <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );

@@ -7,11 +7,23 @@ type Props = {
     postSlug: string;
     locale: string;
     parentId?: string | null;
-    placeholder?: string;
+    placeholder: string;
+    postLabel: string;
+    postingLabel: string;
+    cancelLabel: string;
     onSuccess?: () => void;
 };
 
-export function CommentForm({ postSlug, locale, parentId = null, placeholder = "Write a comment…", onSuccess }: Props) {
+export function CommentForm({
+    postSlug,
+    locale,
+    parentId = null,
+    placeholder,
+    postLabel,
+    postingLabel,
+    cancelLabel,
+    onSuccess,
+}: Props) {
     const [error, setError] = useState("");
     const [isPending, startTransition] = useTransition();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -51,7 +63,7 @@ export function CommentForm({ postSlug, locale, parentId = null, placeholder = "
                         onClick={onSuccess}
                         className="rounded-lg px-4 py-1.5 text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
                     >
-                        Cancel
+                        {cancelLabel}
                     </button>
                 )}
                 <button
@@ -59,7 +71,7 @@ export function CommentForm({ postSlug, locale, parentId = null, placeholder = "
                     disabled={isPending}
                     className="rounded-lg bg-neutral-900 px-4 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-80 disabled:opacity-50 dark:bg-white dark:text-neutral-900"
                 >
-                    {isPending ? "Posting…" : "Post"}
+                    {isPending ? postingLabel : postLabel}
                 </button>
             </div>
         </form>

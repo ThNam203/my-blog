@@ -8,7 +8,13 @@ type Props = {
     secondaryCta: string;
 };
 
-export function Footer({ description, sideWebsiteUrl, instagramUrl, primaryCta, secondaryCta }: Props) {
+export function Footer({
+    description,
+    sideWebsiteUrl,
+    instagramUrl,
+    primaryCta,
+    secondaryCta,
+}: Props) {
     return (
         <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">
             <Container>

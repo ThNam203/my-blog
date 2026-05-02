@@ -6,10 +6,11 @@ declare global {
     var updateDOM: () => void;
 }
 
-type ColorSchemePreference = "system" | "dark" | "light";
+export type ColorSchemePreference = "system" | "dark" | "light";
 
 const STORAGE_KEY = "nam-blog-theme";
-const modes: ColorSchemePreference[] = ["dark", "light", "system"];
+
+export const THEME_MENU_OPTIONS: ColorSchemePreference[] = ["dark", "light", "system"];
 type ThemeLabelMap = Record<ColorSchemePreference, string>;
 const defaultModeLabels: ThemeLabelMap = {
     dark: "Dark",
@@ -58,17 +59,17 @@ export const NoFOUCScript = (storageKey: string) => {
 
 let updateDOM: () => void;
 
-/**
- * Switch button to quickly toggle user preference.
- */
-const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
+type ColorSchemePreferenceState = {
+    mode: ColorSchemePreference;
+    setMode: (next: ColorSchemePreference) => void;
+    isMounted: boolean;
+};
+
+export function useColorSchemePreference(): ColorSchemePreferenceState {
     const [mode, setMode] = useState<ColorSchemePreference>("system");
     const [isMounted, setIsMounted] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // store global functions to local variables to avoid any interference
         updateDOM = window.updateDOM;
         const storedMode = localStorage.getItem(STORAGE_KEY);
         if (storedMode === "dark" || storedMode === "light" || storedMode === "system") {
@@ -76,7 +77,6 @@ const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
         }
         setIsMounted(true);
 
-        /** Sync the tabs */
         const handleStorage = (e: StorageEvent): void => {
             if (e.key !== STORAGE_KEY) {
                 return;
@@ -90,6 +90,32 @@ const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
             setMode("system");
         };
 
+        addEventListener("storage", handleStorage);
+
+        return () => {
+            removeEventListener("storage", handleStorage);
+        };
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, mode);
+        if (updateDOM) {
+            updateDOM();
+        }
+    }, [mode]);
+
+    return { mode, setMode, isMounted };
+}
+
+/**
+ * Switch button to quickly toggle user preference.
+ */
+const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
+    const { mode, setMode, isMounted } = useColorSchemePreference();
+    const [isOpen, setIsOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
         const handleClickOutside = (event: MouseEvent): void => {
             if (!menuRef.current?.contains(event.target as Node)) {
                 setIsOpen(false);
@@ -102,23 +128,14 @@ const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
             }
         };
 
-        addEventListener("storage", handleStorage);
         document.addEventListener("mousedown", handleClickOutside);
         document.addEventListener("keydown", handleEscape);
 
         return () => {
-            removeEventListener("storage", handleStorage);
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("keydown", handleEscape);
         };
     }, []);
-
-    useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, mode);
-        if (updateDOM) {
-            updateDOM();
-        }
-    }, [mode]);
 
     const handleModeSelect = (nextMode: ColorSchemePreference) => {
         setMode(nextMode);
@@ -141,7 +158,7 @@ const Switch = ({ labels }: { labels: ThemeLabelMap }) => {
                     className="absolute right-0 mt-2 min-w-28 rounded-md border border-neutral-300
                     bg-white p-1 shadow-lg dark:border-slate-600 dark:bg-slate-900"
                 >
-                    {modes.map((themeMode) => (
+                    {THEME_MENU_OPTIONS.map((themeMode) => (
                         <button
                             key={themeMode}
                             type="button"
@@ -171,7 +188,5 @@ export const ThemeSwitcher = ({ labels }: Props) => {
         ...labels,
     };
 
-    return (
-        <Switch labels={resolvedLabels} />
-    );
+    return <Switch labels={resolvedLabels} />;
 };

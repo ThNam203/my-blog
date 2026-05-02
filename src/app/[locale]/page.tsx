@@ -41,11 +41,7 @@ export default async function Index({ params }: Props) {
                 locale={locale}
             />
             {morePosts.length > 0 && (
-                <MoreStories
-                    posts={morePosts}
-                    locale={locale}
-                    title={dictionary.ui.moreStories}
-                />
+                <MoreStories posts={morePosts} locale={locale} title={dictionary.ui.moreStories} />
             )}
         </Container>
     );

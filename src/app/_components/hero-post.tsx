@@ -17,7 +17,16 @@ type Props = {
     locale: Locale;
 };
 
-export function HeroPost({ title, categories, coverImage, date, excerpt, author, slug, locale }: Props) {
+export function HeroPost({
+    title,
+    categories,
+    coverImage,
+    date,
+    excerpt,
+    author,
+    slug,
+    locale,
+}: Props) {
     return (
         <section>
             {coverImage ? (

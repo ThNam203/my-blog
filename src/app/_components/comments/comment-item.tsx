@@ -12,9 +12,34 @@ type Props = {
     locale: string;
     currentUserId: string | null;
     isAdmin: boolean;
+    replyPlaceholderTemplate: string;
+    postLabel: string;
+    postingLabel: string;
+    cancelLabel: string;
+    anonymousLabel: string;
+    replyLabel: string;
+    deleteLabel: string;
+    deleteCommentAria: string;
+    deleteReplyAria: string;
 };
 
-export function CommentItem({ comment, replies, postSlug, locale, currentUserId, isAdmin }: Props) {
+export function CommentItem({
+    comment,
+    replies,
+    postSlug,
+    locale,
+    currentUserId,
+    isAdmin,
+    replyPlaceholderTemplate,
+    postLabel,
+    postingLabel,
+    cancelLabel,
+    anonymousLabel,
+    replyLabel,
+    deleteLabel,
+    deleteCommentAria,
+    deleteReplyAria,
+}: Props) {
     const [showReplyForm, setShowReplyForm] = useState(false);
     const [isPending, startTransition] = useTransition();
 
@@ -26,7 +51,8 @@ export function CommentItem({ comment, replies, postSlug, locale, currentUserId,
         });
     }
 
-    const displayName = comment.profiles?.display_name ?? "Anonymous";
+    const displayName = comment.profiles?.display_name ?? anonymousLabel;
+    const initial = (displayName[0] ?? "?").toUpperCase();
     const formattedDate = new Date(comment.created_at).toLocaleDateString(
         locale === "vi" ? "vi-VN" : "en-US",
         { year: "numeric", month: "short", day: "numeric" },
@@ -38,34 +64,35 @@ export function CommentItem({ comment, replies, postSlug, locale, currentUserId,
                 <div className="mb-2 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 text-sm font-semibold text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200">
-                            {displayName[0].toUpperCase()}
+                            {initial}
                         </div>
                         <span className="text-sm font-semibold">{displayName}</span>
                         <span className="text-xs text-neutral-400">{formattedDate}</span>
                     </div>
                     {canDelete && (
                         <button
+                            type="button"
                             onClick={handleDelete}
                             disabled={isPending}
-                            className="text-xs text-neutral-400 hover:text-red-500 disabled:opacity-50 transition-colors"
-                            aria-label="Delete comment"
+                            className="text-xs text-neutral-400 transition-colors hover:text-red-500 disabled:opacity-50"
+                            aria-label={deleteCommentAria}
                         >
-                            Delete
+                            {deleteLabel}
                         </button>
                     )}
                 </div>
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">{comment.body}</p>
+                <p className="whitespace-pre-wrap text-sm leading-relaxed">{comment.body}</p>
                 {currentUserId && (
                     <button
+                        type="button"
                         onClick={() => setShowReplyForm((v) => !v)}
-                        className="mt-2 text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                        className="mt-2 text-xs text-neutral-400 transition-colors hover:text-neutral-600 dark:hover:text-neutral-300"
                     >
-                        {showReplyForm ? "Cancel" : "Reply"}
+                        {showReplyForm ? cancelLabel : replyLabel}
                     </button>
                 )}
             </div>
 
-            {/* Replies */}
             {replies.length > 0 && (
                 <div className="ml-8 flex flex-col gap-2">
                     {replies.map((reply) => (
@@ -79,20 +106,25 @@ export function CommentItem({ comment, replies, postSlug, locale, currentUserId,
                                 currentUserId={currentUserId}
                                 isAdmin={isAdmin}
                                 postSlug={postSlug}
+                                anonymousLabel={anonymousLabel}
+                                deleteLabel={deleteLabel}
+                                deleteReplyAria={deleteReplyAria}
                             />
                         </div>
                     ))}
                 </div>
             )}
 
-            {/* Reply form */}
             {showReplyForm && currentUserId && (
                 <div className="ml-8">
                     <CommentForm
                         postSlug={postSlug}
                         locale={locale}
                         parentId={comment.id}
-                        placeholder={`Reply to ${displayName}…`}
+                        placeholder={replyPlaceholderTemplate.replaceAll("{name}", displayName)}
+                        postLabel={postLabel}
+                        postingLabel={postingLabel}
+                        cancelLabel={cancelLabel}
                         onSuccess={() => setShowReplyForm(false)}
                     />
                 </div>
@@ -107,16 +139,23 @@ function ReplyRow({
     currentUserId,
     isAdmin,
     postSlug,
+    anonymousLabel,
+    deleteLabel,
+    deleteReplyAria,
 }: {
     reply: Comment;
     locale: string;
     currentUserId: string | null;
     isAdmin: boolean;
     postSlug: string;
+    anonymousLabel: string;
+    deleteLabel: string;
+    deleteReplyAria: string;
 }) {
     const [isPending, startTransition] = useTransition();
     const canDelete = isAdmin || currentUserId === reply.user_id;
-    const displayName = reply.profiles?.display_name ?? "Anonymous";
+    const displayName = reply.profiles?.display_name ?? anonymousLabel;
+    const initial = (displayName[0] ?? "?").toUpperCase();
     const formattedDate = new Date(reply.created_at).toLocaleDateString(
         locale === "vi" ? "vi-VN" : "en-US",
         { year: "numeric", month: "short", day: "numeric" },
@@ -127,23 +166,28 @@ function ReplyRow({
             <div className="mb-2 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-full bg-neutral-300 text-xs font-semibold text-neutral-700 dark:bg-neutral-600 dark:text-neutral-200">
-                        {displayName[0].toUpperCase()}
+                        {initial}
                     </div>
                     <span className="text-sm font-semibold">{displayName}</span>
                     <span className="text-xs text-neutral-400">{formattedDate}</span>
                 </div>
                 {canDelete && (
                     <button
-                        onClick={() => startTransition(async () => { await deleteComment(reply.id, postSlug, locale); })}
+                        type="button"
+                        onClick={() =>
+                            startTransition(async () => {
+                                await deleteComment(reply.id, postSlug, locale);
+                            })
+                        }
                         disabled={isPending}
-                        className="text-xs text-neutral-400 hover:text-red-500 disabled:opacity-50 transition-colors"
-                        aria-label="Delete reply"
+                        className="text-xs text-neutral-400 transition-colors hover:text-red-500 disabled:opacity-50"
+                        aria-label={deleteReplyAria}
                     >
-                        Delete
+                        {deleteLabel}
                     </button>
                 )}
             </div>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">{reply.body}</p>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed">{reply.body}</p>
         </>
     );
 }

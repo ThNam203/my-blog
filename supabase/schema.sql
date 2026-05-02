@@ -15,6 +15,9 @@ create policy "profiles are viewable by everyone"
 create policy "users can update own profile"
   on public.profiles for update using (auth.uid() = id);
 
+create policy "users can insert own profile"
+  on public.profiles for insert with check (auth.uid() = id);
+
 -- Auto-create profile on signup, pulling display_name from user_metadata
 create or replace function public.handle_new_user()
 returns trigger as $$

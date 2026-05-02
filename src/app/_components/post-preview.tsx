@@ -17,7 +17,16 @@ type Props = {
     locale: Locale;
 };
 
-export function PostPreview({ title, categories, coverImage, date, excerpt, author, slug, locale }: Props) {
+export function PostPreview({
+    title,
+    categories,
+    coverImage,
+    date,
+    excerpt,
+    author,
+    slug,
+    locale,
+}: Props) {
     return (
         <div>
             {coverImage ? (

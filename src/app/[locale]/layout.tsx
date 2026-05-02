@@ -4,11 +4,11 @@ import { notFound } from "next/navigation";
 import Alert from "@/app/_components/alert";
 import Footer from "@/app/_components/footer";
 import { SiteMusicPlayer } from "@/app/_components/site-music-player";
-import { ThemeSwitcher } from "@/app/_components/theme-switcher";
-import { LocaleSwitcher } from "@/app/_components/locale-switcher";
+import { HeaderSiteMenu } from "@/app/_components/header-site-menu";
 import { LETSLIVE_URL, WEB_DEFAULT_INSTAGRAM_URL } from "@/lib/constants";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getAuthModalLabels, getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale, type Locale } from "@/i18n/config";
+import { createClient } from "@/lib/supabase/server";
 import { MUSIC_TRACKS } from "@/lib/music-tracks";
 import { Intro } from "../_components/intro";
 
@@ -45,6 +45,16 @@ export default async function LocaleLayout({ children, params }: Props) {
     }
 
     const dictionary = getDictionary(locale as Locale);
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    const meta = user?.user_metadata as { avatar_url?: string; picture?: string } | undefined;
+    const avatarUrl =
+        (typeof meta?.avatar_url === "string" && meta.avatar_url) ||
+        (typeof meta?.picture === "string" && meta.picture) ||
+        null;
 
     return (
         <>
@@ -55,19 +65,29 @@ export default async function LocaleLayout({ children, params }: Props) {
             />
             <header className="container mx-auto flex items-center justify-between">
                 <Intro heading={dictionary.ui.blogHeading} />
-                <div className="flex items-center gap-2">
-                <ThemeSwitcher
-                    labels={{
-                        dark: dictionary.ui.themeDark,
-                        light: dictionary.ui.themeLight,
-                        system: dictionary.ui.themeSystem,
-                    }}
-                />
-                <LocaleSwitcher
-                    locale={locale}
-                    vietnameseLabel={dictionary.ui.languageOptionVietnamese}
-                    englishLabel={dictionary.ui.languageOptionEnglish}
-                />
+                <div className="relative flex items-center gap-2">
+                    <HeaderSiteMenu
+                        locale={locale}
+                        isAuthenticated={!!user}
+                        avatarUrl={avatarUrl}
+                        vietnameseLabel={dictionary.ui.languageOptionVietnamese}
+                        englishLabel={dictionary.ui.languageOptionEnglish}
+                        languageSectionLabel={dictionary.ui.languageLabel}
+                        themeLabels={{
+                            dark: dictionary.ui.themeDark,
+                            light: dictionary.ui.themeLight,
+                            system: dictionary.ui.themeSystem,
+                        }}
+                        labels={{
+                            menuOpenAria: dictionary.ui.headerMenuOpenAria,
+                            themeSection: dictionary.ui.headerMenuTheme,
+                            signIn: dictionary.ui.headerMenuSignIn,
+                            signUp: dictionary.ui.headerMenuSignUp,
+                            signOut: dictionary.ui.headerMenuSignOut,
+                            profile: dictionary.ui.headerMenuProfile,
+                        }}
+                        authModal={getAuthModalLabels(dictionary)}
+                    />
                 </div>
             </header>
             <main id="site-main" className={cn(MUSIC_TRACKS.length > 0 && "pb-28")}>

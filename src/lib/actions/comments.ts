@@ -1,8 +1,15 @@
 "use server";
 
+import { isValidLocale, type Locale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { Comment } from "@/lib/supabase/types";
+
+function dictForLocale(locale: string) {
+    const loc: Locale = isValidLocale(locale) ? locale : "en";
+    return getDictionary(loc);
+}
 
 export async function getComments(postSlug: string): Promise<Comment[]> {
     const supabase = await createClient();
@@ -27,7 +34,7 @@ export async function addComment(
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { error: "Not authenticated" };
+    if (!user) return { error: dictForLocale(locale).errors.notAuthenticated };
 
     // If replying to a reply, find the top-level parent to keep threading at 2 levels
     let resolvedParentId = parentId;
@@ -65,7 +72,7 @@ export async function deleteComment(
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { error: "Not authenticated" };
+    if (!user) return { error: dictForLocale(locale).errors.notAuthenticated };
 
     const isAdmin = user.email === process.env.ADMIN_EMAIL;
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { defaultLocale, locales, type Locale } from "@/i18n/config";
+import { defaultLocale, type Locale } from "@/i18n/config";
+import { swapLocaleInPathname } from "@/i18n/swap-locale-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -10,22 +11,6 @@ type Props = {
     vietnameseLabel: string;
     englishLabel: string;
 };
-
-function swapLocaleInPathname(pathname: string, targetLocale: Locale): string {
-    const segments = pathname.split("/").filter(Boolean);
-    const firstSegment = segments[0];
-
-    if (firstSegment && locales.includes(firstSegment as Locale)) {
-        segments[0] = targetLocale;
-        return `/${segments.join("/")}`;
-    }
-
-    if (segments.length === 0) {
-        return `/${targetLocale}`;
-    }
-
-    return `/${targetLocale}/${segments.join("/")}`;
-}
 
 export function LocaleSwitcher({ locale, vietnameseLabel, englishLabel }: Props) {
     const pathname = usePathname() ?? `/${defaultLocale}`;
