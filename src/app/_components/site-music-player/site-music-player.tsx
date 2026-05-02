@@ -4,6 +4,7 @@ import {
     useCallback,
     useEffect,
     useId,
+    useLayoutEffect,
     useRef,
     useState,
     type ChangeEvent,
@@ -36,6 +37,13 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
         safeDuration > 0
             ? Math.min(1, Math.max(0, currentTime / safeDuration))
             : 0;
+
+    useLayoutEffect(() => {
+        if (tracks.length === 0) {
+            return;
+        }
+        setCurrentIndex(Math.floor(Math.random() * tracks.length));
+    }, [tracks.length]);
 
     useEffect(() => {
         if (localStorage.getItem(MINIMIZED_KEY) === "1") {
