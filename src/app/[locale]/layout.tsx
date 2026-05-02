@@ -105,6 +105,9 @@ export default async function LocaleLayout({ children, params }: Props) {
                         next: dictionary.ui.musicNext,
                         minimize: dictionary.ui.musicMinimize,
                         restore: dictionary.ui.musicRestore,
+                        showPlaylist: dictionary.ui.musicShowPlaylist,
+                        playlistHeading: dictionary.ui.musicPlaylistHeading,
+                        nowPlaying: dictionary.ui.musicNowPlaying,
                     }}
                 />
             )}

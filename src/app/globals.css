@@ -27,3 +27,23 @@
 .dark .music-player-range::-moz-range-thumb {
     background: rgb(241 245 249);
 }
+
+/* Music player: scrolling sine (period width 28px — keep in sync with playing-wave.tsx PERIOD) */
+@keyframes music-sine-scroll {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-28px, 0, 0);
+    }
+}
+
+.music-playing-sine-scroll {
+    animation: music-sine-scroll 1.15s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-playing-sine-scroll {
+        animation: none;
+    }
+}

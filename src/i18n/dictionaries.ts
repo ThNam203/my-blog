@@ -33,6 +33,9 @@ export type Dictionary = {
         musicNext: string;
         musicMinimize: string;
         musicRestore: string;
+        musicShowPlaylist: string;
+        musicPlaylistHeading: string;
+        musicNowPlaying: string;
         profilePageHeading: string;
         profilePageMetaTitle: string;
         profileDisplayNameLabel: string;
@@ -145,6 +148,9 @@ const dictionaries: Record<Locale, Dictionary> = {
             musicNext: "Bài sau",
             musicMinimize: "Thu nhỏ trình phát xuống góc màn hình",
             musicRestore: "Mở lại trình phát nhạc",
+            musicShowPlaylist: "Xem danh sách bài hát",
+            musicPlaylistHeading: "Danh sách phát",
+            musicNowPlaying: "Đang phát",
             profilePageHeading: "Hồ sơ",
             profilePageMetaTitle: "Chỉnh sửa hồ sơ",
             profileDisplayNameLabel: "Tên hiển thị",
@@ -220,6 +226,9 @@ const dictionaries: Record<Locale, Dictionary> = {
             musicNext: "Next track",
             musicMinimize: "Minimize player to corner",
             musicRestore: "Restore music player",
+            musicShowPlaylist: "Show playlist",
+            musicPlaylistHeading: "Playlist",
+            musicNowPlaying: "Now playing",
             profilePageHeading: "Profile",
             profilePageMetaTitle: "Edit profile",
             profileDisplayNameLabel: "Display name",

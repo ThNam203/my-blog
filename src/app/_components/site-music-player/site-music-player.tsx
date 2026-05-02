@@ -133,6 +133,10 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
         }
     }, []);
 
+    const selectTrack = useCallback((index: number) => {
+        setCurrentIndex(index);
+    }, []);
+
     if (tracks.length === 0 || !track) {
         return null;
     }
@@ -158,6 +162,7 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                 />
             ) : (
                 <ExpandedPlayerBar
+                    currentIndex={currentIndex}
                     currentTime={currentTime}
                     goNext={goNext}
                     goPrev={goPrev}
@@ -166,9 +171,11 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
                     labels={labels}
                     onMinimize={() => setMinimized(true)}
                     onSeek={onSeek}
+                    onSelectTrack={selectTrack}
                     safeDuration={safeDuration}
                     togglePlay={togglePlay}
                     track={track}
+                    tracks={tracks}
                 />
             )}
         </>

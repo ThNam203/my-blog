@@ -53,3 +53,11 @@ export function MusicGlyph({ className }: { className?: string }) {
         </svg>
     );
 }
+
+export function QueueListGlyph() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h10v2H4v-2z" />
+        </svg>
+    );
+}

@@ -7,4 +7,7 @@ export type SiteMusicPlayerLabels = {
     next: string;
     minimize: string;
     restore: string;
+    showPlaylist: string;
+    playlistHeading: string;
+    nowPlaying: string;
 };

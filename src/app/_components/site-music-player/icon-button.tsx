@@ -5,14 +5,16 @@ type Props = {
     label: string;
     onClick: () => void;
     children: ReactNode;
+    ariaExpanded?: boolean;
 };
 
-export function IconButton({ label, onClick, children }: Props) {
+export function IconButton({ label, onClick, children, ariaExpanded }: Props) {
     return (
         <button
             type="button"
             onClick={onClick}
             aria-label={label}
+            aria-expanded={ariaExpanded}
             className={cn(
                 "flex h-9 w-9 items-center justify-center rounded-full text-neutral-800 transition-colors",
                 "hover:bg-neutral-200 dark:text-slate-100 dark:hover:bg-slate-800",
