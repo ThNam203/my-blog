@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
 import cn from "classnames";
 import { cookies } from "next/headers";
@@ -65,6 +66,7 @@ export default async function RootLayout({
             </head>
             <body className={cn(inter.className, "dark:bg-slate-900 dark:text-slate-400")}>
                 {children}
+                <SpeedInsights />
             </body>
         </html>
     );
