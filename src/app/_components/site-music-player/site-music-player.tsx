@@ -1,0 +1,176 @@
+"use client";
+
+import {
+    useCallback,
+    useEffect,
+    useId,
+    useRef,
+    useState,
+    type ChangeEvent,
+} from "react";
+import type { MusicTrack } from "@/lib/music-tracks";
+import { MINIMIZED_KEY } from "./constants";
+import { ExpandedPlayerBar } from "./expanded-player-bar";
+import { MinimizedPlayerFab } from "./minimized-player-fab";
+import type { SiteMusicPlayerLabels } from "./types";
+
+type Props = {
+    tracks: MusicTrack[];
+    labels: SiteMusicPlayerLabels;
+};
+
+export function SiteMusicPlayer({ tracks, labels }: Props) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [minimized, setMinimized] = useState(false);
+    const [hydrated, setHydrated] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    const track = tracks[currentIndex];
+    const hasPlaylist = tracks.length > 1;
+    const safeDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
+    const miniProgressGradientId = `nam-mini-progress-${useId().replace(/:/g, "")}`;
+    const minimizedProgress =
+        safeDuration > 0
+            ? Math.min(1, Math.max(0, currentTime / safeDuration))
+            : 0;
+
+    useEffect(() => {
+        if (localStorage.getItem(MINIMIZED_KEY) === "1") {
+            setMinimized(true);
+        }
+        setHydrated(true);
+    }, []);
+
+    useEffect(() => {
+        if (!hydrated) {
+            return;
+        }
+        localStorage.setItem(MINIMIZED_KEY, minimized ? "1" : "0");
+        const main = document.getElementById("site-main");
+        if (main) {
+            if (minimized) {
+                main.classList.remove("pb-28");
+                main.classList.add("pb-6");
+            } else {
+                main.classList.add("pb-28");
+                main.classList.remove("pb-6");
+            }
+        }
+    }, [minimized, hydrated]);
+
+    useEffect(() => {
+        if (!isPlaying) {
+            return;
+        }
+        const el = audioRef.current;
+        if (!el) {
+            return;
+        }
+        void el.play().catch(() => setIsPlaying(false));
+    }, [currentIndex, isPlaying]);
+
+    const togglePlay = useCallback(() => {
+        const el = audioRef.current;
+        if (!el) {
+            return;
+        }
+        if (el.paused) {
+            void el
+                .play()
+                .then(() => setIsPlaying(true))
+                .catch(() => setIsPlaying(false));
+        } else {
+            el.pause();
+            setIsPlaying(false);
+        }
+    }, []);
+
+    const goPrev = useCallback(() => {
+        if (!hasPlaylist) {
+            return;
+        }
+        setCurrentIndex((i) => (i <= 0 ? tracks.length - 1 : i - 1));
+    }, [hasPlaylist, tracks.length]);
+
+    const goNext = useCallback(() => {
+        if (!hasPlaylist) {
+            return;
+        }
+        setCurrentIndex((i) => (i >= tracks.length - 1 ? 0 : i + 1));
+    }, [hasPlaylist, tracks.length]);
+
+    const onEnded = useCallback(() => {
+        if (hasPlaylist) {
+            setCurrentIndex((i) => (i >= tracks.length - 1 ? 0 : i + 1));
+        } else {
+            setIsPlaying(false);
+        }
+    }, [hasPlaylist, tracks.length]);
+
+    const onTimeUpdate = useCallback(() => {
+        const el = audioRef.current;
+        if (el) {
+            setCurrentTime(el.currentTime);
+        }
+    }, []);
+
+    const onLoadedMetadata = useCallback(() => {
+        const el = audioRef.current;
+        if (el) {
+            setDuration(el.duration);
+        }
+    }, []);
+
+    const onSeek = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const el = audioRef.current;
+        const value = Number(e.target.value);
+        if (el && Number.isFinite(value)) {
+            el.currentTime = value;
+            setCurrentTime(value);
+        }
+    }, []);
+
+    if (tracks.length === 0 || !track) {
+        return null;
+    }
+
+    return (
+        <>
+            <audio
+                ref={audioRef}
+                src={track.src}
+                preload="metadata"
+                onEnded={onEnded}
+                onTimeUpdate={onTimeUpdate}
+                onLoadedMetadata={onLoadedMetadata}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+            />
+            {minimized ? (
+                <MinimizedPlayerFab
+                    gradientId={miniProgressGradientId}
+                    labels={labels}
+                    progress={minimizedProgress}
+                    onExpand={() => setMinimized(false)}
+                />
+            ) : (
+                <ExpandedPlayerBar
+                    currentTime={currentTime}
+                    goNext={goNext}
+                    goPrev={goPrev}
+                    hasPlaylist={hasPlaylist}
+                    isPlaying={isPlaying}
+                    labels={labels}
+                    onMinimize={() => setMinimized(true)}
+                    onSeek={onSeek}
+                    safeDuration={safeDuration}
+                    togglePlay={togglePlay}
+                    track={track}
+                />
+            )}
+        </>
+    );
+}
