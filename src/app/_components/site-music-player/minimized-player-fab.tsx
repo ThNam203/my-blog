@@ -10,12 +10,7 @@ type Props = {
     gradientId: string;
 };
 
-export function MinimizedPlayerFab({
-    labels,
-    onExpand,
-    progress,
-    gradientId,
-}: Props) {
+export function MinimizedPlayerFab({ labels, onExpand, progress, gradientId }: Props) {
     return (
         <button
             type="button"

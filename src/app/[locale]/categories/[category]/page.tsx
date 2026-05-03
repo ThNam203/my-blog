@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllCategories, getPostsByCategory } from "@/lib/api";
 import Container from "@/app/_components/container";
-import Header from "@/app/_components/header";
 import { MoreStories } from "@/app/_components/more-stories";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale, locales } from "@/i18n/config";

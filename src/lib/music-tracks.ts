@@ -1,5 +1,3 @@
-import { WEB_DEFAULT_AUTHOR } from "@/lib/constants";
-
 export type MusicTrack = {
     /** Public URL under `public/` (e.g. `.mp4`, `.wav`, `.m4a`) */
     src: string;
@@ -26,5 +24,5 @@ export const MUSIC_TRACKS: MusicTrack[] = [
         src: "/music/rang_khon.mp3",
         title: "Răng khôn",
         artist: "Phí Phương Anh, RIN9",
-    }
+    },
 ];

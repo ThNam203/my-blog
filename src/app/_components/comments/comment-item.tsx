@@ -124,10 +124,10 @@ export function CommentItem({
                         locale={locale}
                         parentId={comment.id}
                         placeholder={replyPlaceholderTemplate.replaceAll("{name}", displayName)}
-                            postLabel={postLabel}
-                            postingLabel={postingLabel}
-                            postedSuccessLabel={postedSuccessLabel}
-                            cancelLabel={cancelLabel}
+                        postLabel={postLabel}
+                        postingLabel={postingLabel}
+                        postedSuccessLabel={postedSuccessLabel}
+                        cancelLabel={cancelLabel}
                         onSuccess={() => setShowReplyForm(false)}
                     />
                 </div>

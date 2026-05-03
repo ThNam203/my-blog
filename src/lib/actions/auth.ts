@@ -1,6 +1,5 @@
 "use server";
 
-import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { WEB_DEFAULT_URL } from "@/lib/constants";
 
@@ -32,7 +31,7 @@ export async function signOut(): Promise<void> {
 }
 
 export async function signInWithGoogle(): Promise<{ error?: string; url?: string }> {
-    const supabase = await createClient(); ;
+    const supabase = await createClient();
     const redirectTo = `${WEB_DEFAULT_URL}/auth/callback?next=/`;
 
     const { data, error } = await supabase.auth.signInWithOAuth({

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import cn from "classnames";
 import { notFound } from "next/navigation";
 import Alert from "@/app/_components/alert";
 import Footer from "@/app/_components/footer";
@@ -90,10 +89,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     />
                 </div>
             </header>
-            <main 
-                id="site-main" 
-                className="pb-8 px-4 md:px-0"
-            >
+            <main id="site-main" className="pb-8 px-4 md:px-0">
                 {children}
             </main>
             {MUSIC_TRACKS.length > 0 && (

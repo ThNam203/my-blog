@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/api";
 import markdownToHtml from "@/lib/markdownToHtml";
 import Container from "@/app/_components/container";
-import Header from "@/app/_components/header";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
@@ -28,7 +27,6 @@ export default async function Post(props: Params) {
         return notFound();
     }
 
-    const dictionary = getDictionary(params.locale);
     const content = await markdownToHtml(post.content || "");
 
     return (

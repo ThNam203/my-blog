@@ -34,9 +34,7 @@ export function SiteMusicPlayer({ tracks, labels }: Props) {
     const safeDuration = Number.isFinite(duration) && duration > 0 ? duration : 0;
     const miniProgressGradientId = `nam-mini-progress-${useId().replace(/:/g, "")}`;
     const minimizedProgress =
-        safeDuration > 0
-            ? Math.min(1, Math.max(0, currentTime / safeDuration))
-            : 0;
+        safeDuration > 0 ? Math.min(1, Math.max(0, currentTime / safeDuration)) : 0;
 
     useLayoutEffect(() => {
         if (tracks.length === 0) {

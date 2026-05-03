@@ -1,12 +1,7 @@
 import cn from "classnames";
 import type { SiteMusicPlayerLabels } from "./types";
 import { IconButton } from "./icon-button";
-import {
-    PauseGlyph,
-    PlayGlyph,
-    SkipBackGlyph,
-    SkipForwardGlyph,
-} from "./glyphs";
+import { PauseGlyph, PlayGlyph, SkipBackGlyph, SkipForwardGlyph } from "./glyphs";
 
 type Props = {
     hasPlaylist: boolean;
@@ -34,10 +29,7 @@ export function MusicPlayerControls({
                     <SkipBackGlyph />
                 </IconButton>
             )}
-            <IconButton
-                label={isPlaying ? labels.pause : labels.play}
-                onClick={togglePlay}
-            >
+            <IconButton label={isPlaying ? labels.pause : labels.play} onClick={togglePlay}>
                 {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
             </IconButton>
             {hasPlaylist && (

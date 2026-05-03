@@ -66,10 +66,7 @@ export function ExpandedPlayerBar({
             return;
         }
         const onPointerDown = (e: PointerEvent) => {
-            if (
-                playlistWrapRef.current &&
-                !playlistWrapRef.current.contains(e.target as Node)
-            ) {
+            if (playlistWrapRef.current && !playlistWrapRef.current.contains(e.target as Node)) {
                 setPlaylistOpen(false);
             }
         };
@@ -98,9 +95,7 @@ export function ExpandedPlayerBar({
                 "dark:border-slate-700 dark:bg-[#121212] dark:text-slate-100 dark:shadow-[0_-4px_24px_rgba(0,0,0,0.4)]",
             )}
         >
-            <div
-                className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-x-2 gap-y-2 px-3 py-2 sm:gap-x-3 sm:px-4"
-            >
+            <div className="mx-auto grid max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-x-2 gap-y-2 px-3 py-2 sm:gap-x-3 sm:px-4">
                 <div className="flex min-w-0 items-center gap-3">
                     <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded bg-neutral-300 dark:bg-slate-700">
                         <div
@@ -129,10 +124,7 @@ export function ExpandedPlayerBar({
                     goNext={goNext}
                     togglePlay={togglePlay}
                 />
-                <div
-                    className="relative flex justify-self-end"
-                    ref={playlistWrapRef}
-                >
+                <div className="relative flex justify-self-end" ref={playlistWrapRef}>
                     <div className="flex items-center gap-0.5 sm:gap-1">
                         <IconButton
                             label={labels.showPlaylist}
@@ -200,9 +192,7 @@ export function ExpandedPlayerBar({
                                                 ) : null}
                                                 <PlayingWave
                                                     visible={isCurrent}
-                                                    animating={
-                                                        isCurrent && isPlaying
-                                                    }
+                                                    animating={isCurrent && isPlaying}
                                                 />
                                             </button>
                                         </li>
@@ -221,9 +211,7 @@ export function ExpandedPlayerBar({
                         min={0}
                         max={safeDuration || 1}
                         step="any"
-                        value={
-                            safeDuration ? Math.min(currentTime, safeDuration) : 0
-                        }
+                        value={safeDuration ? Math.min(currentTime, safeDuration) : 0}
                         onChange={onSeek}
                         disabled={!safeDuration}
                         style={scrubberStyle}

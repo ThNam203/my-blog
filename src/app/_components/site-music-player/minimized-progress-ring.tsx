@@ -20,13 +20,7 @@ export function MinimizedProgressRing({ progress, gradientId }: Props) {
             aria-hidden
         >
             <defs>
-                <linearGradient
-                    id={gradientId}
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                >
+                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#fb7185" />
                     <stop offset="55%" stopColor="#f43f5e" />
                     <stop offset="100%" stopColor="#f472b6" />
