@@ -17,7 +17,7 @@ const Alert = ({ textPrefix, linkLabel, sideWebsiteUrl }: Props) => {
                             href={sideWebsiteUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="underline hover:text-blue-600 duration-200 transition-colors"
+                            className="underline hover:text-gray-300 duration-200 transition-colors"
                         >
                             {linkLabel}
                         </a>
