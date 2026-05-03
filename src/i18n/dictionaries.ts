@@ -1,5 +1,10 @@
 import { type Locale } from "./config";
 
+export type FooterQuote = {
+    text: string;
+    author?: string;
+};
+
 export type Dictionary = {
     metadata: {
         title: string;
@@ -20,6 +25,9 @@ export type Dictionary = {
         postsInCategory: string;
         footerPrimaryCta: string;
         footerSecondaryCta: string;
+        footerQuotes: FooterQuote[];
+        footerQuotePrevAria: string;
+        footerQuoteNextAria: string;
         languageLabel: string;
         languageOptionVietnamese: string;
         languageOptionEnglish: string;
@@ -150,6 +158,21 @@ const dictionaries: Record<Locale, Dictionary> = {
             postsInCategory: "Bài viết trong chủ đề:",
             footerPrimaryCta: "Ghé thăm website Let's Live của mình",
             footerSecondaryCta: "Theo dõi mình trên Instagram",
+            footerQuotes: [
+                {
+                    text: "Trên đời này làm gì có đường, người ta đi mãi thì thành đường thôi",
+                    author: "Lỗ Tấn",
+                },
+                {
+                    text: 'Trong văn hoá Ba Tư, khi bạn khen ai đó xinh đẹp.\nNgười ta sẽ đáp lại rằng:\n"Là do đôi mắt của bạn đẹp."'
+                },
+                {
+                    text: "Bạn không cần hoàn hảo để bắt đầu; bạn cần bắt đầu để trở nên hoàn hảo.",
+                    author: "Zig Ziglar",
+                },
+            ],
+            footerQuotePrevAria: "Trích dẫn trước",
+            footerQuoteNextAria: "Trích dẫn sau",
             languageLabel: "Ngôn ngữ",
             languageOptionVietnamese: "Tiếng Việt",
             languageOptionEnglish: "English",
@@ -245,6 +268,21 @@ const dictionaries: Record<Locale, Dictionary> = {
             postsInCategory: "Posts in:",
             footerPrimaryCta: "Visit my Let's Live website",
             footerSecondaryCta: "Follow me on Instagram",
+            footerQuotes: [
+                {
+                    text: "For actually there is no road on the earth; when many people pass one way, a road is made.",
+                    author: "Lu Xun",
+                },
+                {
+                    text: 'In Persian culture, when you compliment someone\'s beauty.\nThey will reply:\n"It is because of the beauty of your eyes."',
+                },
+                {
+                    text: "You don't have to be great to start, but you have to start to be great",
+                    author: "Zig Ziglar",
+                },
+            ],
+            footerQuotePrevAria: "Previous quote",
+            footerQuoteNextAria: "Next quote",
             languageLabel: "Language",
             languageOptionVietnamese: "Tiếng Việt",
             languageOptionEnglish: "English",
@@ -305,8 +343,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             profileEmailFieldLabel: "Email",
             confessionsNavLabel: "Or a little conffession? Please?",
             confessionsPageMetaTitle: "Or a little conffession? Please?",
-            confessionsPageDescription:
-                "Post an anonymous confession.",
+            confessionsPageDescription: "Post an anonymous confession.",
             confessionsHeading: "Or a little conffession? Please?",
             confessionsLead: "Share what's on your mind anonymously.",
             confessionsFormHeading: "Submit a confession",

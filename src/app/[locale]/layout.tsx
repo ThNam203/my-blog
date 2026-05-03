@@ -123,6 +123,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                 instagramUrl={WEB_DEFAULT_INSTAGRAM_URL}
                 primaryCta={dictionary.ui.footerPrimaryCta}
                 secondaryCta={dictionary.ui.footerSecondaryCta}
+                locale={locale as Locale}
+                quotes={dictionary.ui.footerQuotes}
+                quotePrevAria={dictionary.ui.footerQuotePrevAria}
+                quoteNextAria={dictionary.ui.footerQuoteNextAria}
             />
         </>
     );

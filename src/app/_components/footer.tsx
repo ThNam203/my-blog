@@ -1,4 +1,7 @@
 import Container from "@/app/_components/container";
+import { FooterQuotes } from "@/app/_components/footer-quotes";
+import type { FooterQuote } from "@/i18n/dictionaries";
+import type { Locale } from "@/i18n/config";
 
 type Props = {
     description: string;
@@ -6,6 +9,10 @@ type Props = {
     instagramUrl: string;
     primaryCta: string;
     secondaryCta: string;
+    locale: Locale;
+    quotes: FooterQuote[];
+    quotePrevAria: string;
+    quoteNextAria: string;
 };
 
 export function Footer({
@@ -14,10 +21,22 @@ export function Footer({
     instagramUrl,
     primaryCta,
     secondaryCta,
+    locale,
+    quotes,
+    quotePrevAria,
+    quoteNextAria,
 }: Props) {
+    const quoteStorageKey = `my-blog:footerQuoteIndex:${locale}`;
+
     return (
         <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">
             <Container>
+                <FooterQuotes
+                    quotes={quotes}
+                    storageKey={quoteStorageKey}
+                    prevAria={quotePrevAria}
+                    nextAria={quoteNextAria}
+                />
                 <div className="py-28 flex flex-col lg:flex-row items-center">
                     <h3
                         className="text-4xl lg:text-[2.5rem] font-bold tracking-tighter leading-tight text-center
