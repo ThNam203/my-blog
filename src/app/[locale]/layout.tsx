@@ -63,7 +63,14 @@ export default async function LocaleLayout({ children, params }: Props) {
                 sideWebsiteUrl={LETSLIVE_URL}
             />
             <header className="md:container mx-auto px-4 md:px-0 flex items-center justify-between">
-                <Intro heading={dictionary.ui.blogHeading} homeHref={`/${locale}`} />
+                <Intro
+                    heading={dictionary.ui.blogHeading}
+                    homeHref={`/${locale}`}
+                    secondaryNav={{
+                        href: `/${locale}/confessions`,
+                        label: dictionary.ui.confessionsNavLabel,
+                    }}
+                />
                 <div className="relative flex items-center gap-2">
                     <HeaderSiteMenu
                         locale={locale}

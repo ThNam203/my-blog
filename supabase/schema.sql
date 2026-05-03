@@ -61,3 +61,19 @@ create policy "users can delete own comments"
 -- Index for fast per-post queries
 create index comments_post_slug_idx on public.comments(post_slug);
 create index comments_parent_id_idx on public.comments(parent_id);
+
+-- Anonymous confessions: no user_id, email, locale, or other identity fields
+create table public.confessions (
+  id         uuid        primary key default gen_random_uuid(),
+  body       text        not null check (char_length(body) between 1 and 2000),
+  created_at timestamptz not null default now()
+);
+
+alter table public.confessions enable row level security;
+
+create policy "confessions are viewable by everyone"
+  on public.confessions for select using (true);
+
+-- Inserts are performed only via service role in server actions (no anon insert policy)
+
+create index confessions_created_at_idx on public.confessions(created_at desc);

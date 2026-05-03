@@ -39,6 +39,22 @@ export type Database = {
                 };
                 Relationships: [];
             };
+            confessions: {
+                Row: {
+                    id: string;
+                    body: string;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    body: string;
+                    created_at?: string;
+                };
+                Update: {
+                    body?: string;
+                };
+                Relationships: [];
+            };
         };
         Views: Record<string, never>;
         Functions: Record<string, never>;
@@ -50,3 +66,5 @@ export type Database = {
 export type Comment = Database["public"]["Tables"]["comments"]["Row"] & {
     profiles: { display_name: string } | null;
 };
+
+export type Confession = Database["public"]["Tables"]["confessions"]["Row"];

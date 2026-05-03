@@ -9,6 +9,7 @@ export type Dictionary = {
     errors: {
         notAuthenticated: string;
         displayNameLength: string;
+        confessionBodyLength: string;
     };
     ui: {
         headerTitle: string;
@@ -77,6 +78,19 @@ export type Dictionary = {
         commentsDeleteCommentAria: string;
         commentsDeleteReplyAria: string;
         profileEmailFieldLabel: string;
+        confessionsNavLabel: string;
+        confessionsPageMetaTitle: string;
+        confessionsPageDescription: string;
+        confessionsHeading: string;
+        confessionsLead: string;
+        confessionsFormHeading: string;
+        confessionsListHeading: string;
+        confessionsPrivacy: string;
+        confessionsPlaceholder: string;
+        confessionsSubmit: string;
+        confessionsSubmitting: string;
+        confessionsSuccess: string;
+        confessionsEmpty: string;
     };
 };
 
@@ -125,6 +139,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         errors: {
             notAuthenticated: "Bạn chưa đăng nhập.",
             displayNameLength: "Tên hiển thị phải có từ {min} đến {max} ký tự.",
+            confessionBodyLength: "Nội dung phải từ {min} đến {max} ký tự.",
         },
         ui: {
             headerTitle: "Blog",
@@ -193,6 +208,21 @@ const dictionaries: Record<Locale, Dictionary> = {
             commentsDeleteCommentAria: "Xóa bình luận",
             commentsDeleteReplyAria: "Xóa phản hồi",
             profileEmailFieldLabel: "Email",
+            confessionsNavLabel: "Or a little conffession? Please?",
+            confessionsPageMetaTitle: "Or a little conffession? Please?",
+            confessionsPageDescription:
+                "Gửi confession ẩn danh — không cần tài khoản, không lưu thông tin cá nhân.",
+            confessionsHeading: "Or a little conffession? Please?",
+            confessionsLead: "Viết điều bạn muốn chia sẻ ẩn danh.",
+            confessionsFormHeading: "Gửi confession",
+            confessionsListHeading: "Mới gần đây",
+            confessionsPrivacy:
+                "Mình không lưu email, tên hay dữ liệu nhận dạng nào, chỉ lưu nội dung bạn gửi và thời gian đăng. Vì vậy bạn cũng không thể nào sửa nội dung nếu có vấn đề gì, hoặc bạn có thể liên hệ mình để sửa.",
+            confessionsPlaceholder: "Viết confession của bạn…",
+            confessionsSubmit: "Gửi",
+            confessionsSubmitting: "Đang gửi…",
+            confessionsSuccess: "Đã gửi confession.",
+            confessionsEmpty: "Chưa có confession nào. Hãy là người đầu tiên!",
         },
     },
     en: {
@@ -204,6 +234,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         errors: {
             notAuthenticated: "You are not signed in.",
             displayNameLength: "Display name must be between {min} and {max} characters.",
+            confessionBodyLength: "Your message must be between {min} and {max} characters.",
         },
         ui: {
             headerTitle: "Blog",
@@ -272,6 +303,21 @@ const dictionaries: Record<Locale, Dictionary> = {
             commentsDeleteCommentAria: "Delete comment",
             commentsDeleteReplyAria: "Delete reply",
             profileEmailFieldLabel: "Email",
+            confessionsNavLabel: "Or a little conffession? Please?",
+            confessionsPageMetaTitle: "Or a little conffession? Please?",
+            confessionsPageDescription:
+                "Post an anonymous confession.",
+            confessionsHeading: "Or a little conffession? Please?",
+            confessionsLead: "Share what's on your mind anonymously.",
+            confessionsFormHeading: "Submit a confession",
+            confessionsListHeading: "Recent",
+            confessionsPrivacy:
+                "I don’t store email, name, or any identifying data, only your message and when it was posted. So you can't edit the content if there's a problem, or you can contact me to edit.",
+            confessionsPlaceholder: "Write your confession…",
+            confessionsSubmit: "Submit",
+            confessionsSubmitting: "Sending…",
+            confessionsSuccess: "Confession posted.",
+            confessionsEmpty: "No confessions yet. Be the first!",
         },
     },
 };
