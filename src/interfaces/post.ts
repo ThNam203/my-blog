@@ -4,6 +4,7 @@ export type PostAddress = {
     name: string;
     address: string;
     link?: string;
+    addressLink?: string;
 };
 
 export type Post = {

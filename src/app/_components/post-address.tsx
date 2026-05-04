@@ -21,11 +21,22 @@ export function PostAddress({ address }: Props) {
                 <circle cx="12" cy="10" r="3" />
             </svg>
             <div>
-                <span className="font-medium text-gray-800 dark:text-gray-200">{address.name}</span>
-                <span className="mx-1">·</span>
                 {address.link ? (
                     <a
                         href={address.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-gray-800 dark:text-gray-200 hover:underline"
+                    >
+                        {address.name}
+                    </a>
+                ) : (
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{address.name}</span>
+                )}
+                <span className="mx-1">·</span>
+                {address.addressLink ? (
+                    <a
+                        href={address.addressLink}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:underline"
