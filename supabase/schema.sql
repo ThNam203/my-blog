@@ -77,3 +77,22 @@ create policy "confessions are viewable by everyone"
 -- Inserts are performed only via service role in server actions (no anon insert policy)
 
 create index confessions_created_at_idx on public.confessions(created_at desc);
+
+-- Anonymous post reactions: session_id is a client-generated UUID stored in localStorage
+create table public.post_reactions (
+  id          uuid        primary key default gen_random_uuid(),
+  post_slug   text        not null,
+  emoji       text        not null check (emoji in ('heart', 'fire', 'cry', 'laugh')),
+  session_id  text        not null,
+  created_at  timestamptz not null default now(),
+  constraint post_reactions_unique unique (post_slug, emoji, session_id)
+);
+
+alter table public.post_reactions enable row level security;
+
+create policy "reactions are viewable by everyone"
+  on public.post_reactions for select using (true);
+
+-- Inserts/deletes are performed only via service role in server actions
+
+create index post_reactions_post_slug_idx on public.post_reactions(post_slug);

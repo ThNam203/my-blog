@@ -24,7 +24,7 @@ export const MUSIC_TRACKS: MusicTrack[] = [
         src: "/music/rang_khon.mp3",
         title: "Răng khôn",
         artist: "Phí Phương Anh, RIN9",
-    },    
+    },
     {
         src: "/music/nhung_dieu_nho_nhoi.mp3",
         title: "Những điều nhỏ nhoi",

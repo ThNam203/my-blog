@@ -99,6 +99,7 @@ export type Dictionary = {
         confessionsSubmitting: string;
         confessionsSuccess: string;
         confessionsEmpty: string;
+        reactionsLabel: string;
     };
 };
 
@@ -164,7 +165,7 @@ const dictionaries: Record<Locale, Dictionary> = {
                     author: "Lỗ Tấn",
                 },
                 {
-                    text: 'Trong văn hoá Ba Tư, khi bạn khen ai đó xinh đẹp.\nNgười ta sẽ đáp lại rằng:\n"Là do đôi mắt của bạn đẹp."'
+                    text: 'Trong văn hoá Ba Tư, khi bạn khen ai đó xinh đẹp.\nNgười ta sẽ đáp lại rằng:\n"Là do đôi mắt của bạn đẹp."',
                 },
                 {
                     text: "Bạn không cần hoàn hảo để bắt đầu; bạn cần bắt đầu để trở nên hoàn hảo.",
@@ -246,6 +247,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             confessionsSubmitting: "Đang gửi…",
             confessionsSuccess: "Đã gửi confession.",
             confessionsEmpty: "Chưa có confession nào. Hãy là người đầu tiên!",
+            reactionsLabel: "Cảm nhận của bạn về bài viết này?",
         },
     },
     en: {
@@ -355,6 +357,7 @@ const dictionaries: Record<Locale, Dictionary> = {
             confessionsSubmitting: "Sending…",
             confessionsSuccess: "Confession posted.",
             confessionsEmpty: "No confessions yet. Be the first!",
+            reactionsLabel: "How did this post make you feel?",
         },
     },
 };

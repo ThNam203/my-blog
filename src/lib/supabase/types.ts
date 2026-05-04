@@ -55,6 +55,24 @@ export type Database = {
                 };
                 Relationships: [];
             };
+            post_reactions: {
+                Row: {
+                    id: string;
+                    post_slug: string;
+                    emoji: string;
+                    session_id: string;
+                    created_at: string;
+                };
+                Insert: {
+                    id?: string;
+                    post_slug: string;
+                    emoji: string;
+                    session_id: string;
+                    created_at?: string;
+                };
+                Update: Record<string, never>;
+                Relationships: [];
+            };
         };
         Views: Record<string, never>;
         Functions: Record<string, never>;
@@ -68,3 +86,8 @@ export type Comment = Database["public"]["Tables"]["comments"]["Row"] & {
 };
 
 export type Confession = Database["public"]["Tables"]["confessions"]["Row"];
+
+export type ReactionEmoji = "heart" | "fire" | "cry" | "laugh";
+
+export type ReactionCounts = Record<ReactionEmoji, number>;
+export type MyReactions = Record<ReactionEmoji, boolean>;

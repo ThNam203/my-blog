@@ -6,6 +6,7 @@ import Container from "@/app/_components/container";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
+import { PostReactions } from "@/app/_components/post-reactions";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
 
@@ -29,6 +30,7 @@ export default async function Post(props: Params) {
     }
 
     const content = await markdownToHtml(post.content || "");
+    const dictionary = getDictionary(params.locale);
 
     return (
         <main>
@@ -44,6 +46,10 @@ export default async function Post(props: Params) {
                     />
                     <PostBody content={content} />
                 </article>
+                <PostReactions
+                    postSlug={params.slug}
+                    reactionLabel={dictionary.ui.reactionsLabel}
+                />
                 <CommentSection postSlug={params.slug} locale={params.locale} />
             </Container>
         </main>
