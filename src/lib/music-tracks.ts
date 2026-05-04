@@ -30,4 +30,9 @@ export const MUSIC_TRACKS: MusicTrack[] = [
         title: "Những điều nhỏ nhoi",
         artist: "Ruby Dong Melodies of Soul",
     },
+    {
+        src: "/music/khong_bang.mp3",
+        title: "Không bằng",
+        artist: "Na",
+    },
 ];
