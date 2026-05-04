@@ -5,6 +5,8 @@ import { PostTitle } from "@/app/_components/post-title";
 import { type Author } from "@/interfaces/author";
 import { type Locale } from "@/i18n/config";
 import { PostCategories } from "./post-categories";
+import { PostAddress } from "./post-address";
+import { type PostAddress as PostAddressType } from "@/interfaces/post";
 
 type Props = {
     title: string;
@@ -13,9 +15,10 @@ type Props = {
     date: string;
     author: Author;
     locale: Locale;
+    address?: PostAddressType;
 };
 
-export function PostHeader({ title, categories, coverImage, date, author, locale }: Props) {
+export function PostHeader({ title, categories, coverImage, date, author, locale, address }: Props) {
     return (
         <>
             <PostTitle>{title}</PostTitle>
@@ -35,6 +38,11 @@ export function PostHeader({ title, categories, coverImage, date, author, locale
                 <div className="mb-6 text-lg">
                     <DateFormatter dateString={date} locale={locale} />
                 </div>
+                {address && (
+                    <div className="mb-6">
+                        <PostAddress address={address} />
+                    </div>
+                )}
             </div>
         </>
     );

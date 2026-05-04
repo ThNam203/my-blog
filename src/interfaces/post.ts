@@ -1,5 +1,11 @@
 import { type Author } from "./author";
 
+export type PostAddress = {
+    name: string;
+    address: string;
+    link?: string;
+};
+
 export type Post = {
     slug: string;
     title: string;
@@ -13,4 +19,5 @@ export type Post = {
     };
     content: string;
     preview?: boolean;
+    address?: PostAddress;
 };

@@ -43,6 +43,7 @@ export default async function Post(props: Params) {
                         date={post.date}
                         author={post.author}
                         locale={params.locale}
+                        address={post.address}
                     />
                     <PostBody content={content} />
                 </article>
