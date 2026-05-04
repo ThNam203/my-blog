@@ -1,7 +1,7 @@
 "use server";
 
-import { isValidLocale, locales, type Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { locales } from "@/i18n/config";
+import { getDictionaryForLocale } from "@/i18n/dictionaries";
 import { CONFESSION_BODY_MAX_LENGTH } from "@/lib/constants";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -9,11 +9,6 @@ import type { Confession } from "@/lib/supabase/types";
 
 const MIN_LEN = 1;
 const MAX_LEN = CONFESSION_BODY_MAX_LENGTH;
-
-function dictForLocale(locale: string) {
-    const loc: Locale = isValidLocale(locale) ? locale : "en";
-    return getDictionary(loc);
-}
 
 export async function getConfessions(): Promise<Confession[]> {
     const supabase = await createClient();
@@ -37,8 +32,7 @@ export async function submitConfession(
         return {};
     }
 
-    const loc: Locale = isValidLocale(locale) ? locale : "en";
-    const dictionary = dictForLocale(loc);
+    const dictionary = getDictionaryForLocale(locale);
     const trimmed = body.trim();
 
     if (trimmed.length < MIN_LEN || trimmed.length > MAX_LEN) {

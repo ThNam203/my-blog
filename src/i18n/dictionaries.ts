@@ -1,4 +1,4 @@
-import { type Locale } from "./config";
+import { isValidLocale, type Locale } from "./config";
 
 export type FooterQuote = {
     text: string;
@@ -361,4 +361,9 @@ const dictionaries: Record<Locale, Dictionary> = {
 
 export function getDictionary(locale: Locale): Dictionary {
     return dictionaries[locale];
+}
+
+export function getDictionaryForLocale(locale: string): Dictionary {
+    const loc: Locale = isValidLocale(locale) ? locale : "en";
+    return dictionaries[loc];
 }

@@ -8,6 +8,7 @@ import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
+
 type Params = {
     params: Promise<{
         slug: string;

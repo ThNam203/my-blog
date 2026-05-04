@@ -1,42 +1,20 @@
 "use server";
 
-import { isValidLocale, type Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getDictionaryForLocale } from "@/i18n/dictionaries";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { Comment } from "@/lib/supabase/types";
 
-function dictForLocale(locale: string) {
-    const loc: Locale = isValidLocale(locale) ? locale : "en";
-    return getDictionary(loc);
-}
-
 export async function getComments(postSlug: string): Promise<Comment[]> {
     const supabase = await createClient();
-    const { data: rows, error } = await supabase
+    const { data, error } = await supabase
         .from("comments")
-        .select("*")
+        .select("*, profiles(display_name)")
         .eq("post_slug", postSlug)
         .order("created_at", { ascending: true });
 
-    if (error || !rows?.length) {
-        return [];
-    }
-
-    const userIds = [...new Set(rows.map((r) => r.user_id))];
-    const { data: profileRows } = await supabase
-        .from("profiles")
-        .select("id, display_name")
-        .in("id", userIds);
-
-    const profileByUserId = new Map(
-        (profileRows ?? []).map((p) => [p.id, { display_name: p.display_name }]),
-    );
-
-    return rows.map((row) => ({
-        ...row,
-        profiles: profileByUserId.get(row.user_id) ?? null,
-    })) as Comment[];
+    if (error || !data?.length) return [];
+    return data as unknown as Comment[];
 }
 
 export async function addComment(
@@ -50,7 +28,7 @@ export async function addComment(
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { error: dictForLocale(locale).errors.notAuthenticated };
+    if (!user) return { error: getDictionaryForLocale(locale).errors.notAuthenticated };
 
     // If replying to a reply, find the top-level parent to keep threading at 2 levels
     let resolvedParentId = parentId;
@@ -88,9 +66,9 @@ export async function deleteComment(
         data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user) return { error: dictForLocale(locale).errors.notAuthenticated };
+    if (!user) return { error: getDictionaryForLocale(locale).errors.notAuthenticated };
 
-    const isAdmin = user.email === process.env.ADMIN_EMAIL;
+    const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
 
     if (isAdmin) {
         // Admin bypasses RLS using service role client

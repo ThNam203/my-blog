@@ -1,23 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { isValidLocale, type Locale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getDictionaryForLocale } from "@/i18n/dictionaries";
 import { createClient } from "@/lib/supabase/server";
 
 const MIN_LEN = 2;
 const MAX_LEN = 50;
 
-function dictForLocale(locale: string) {
-    const loc: Locale = isValidLocale(locale) ? locale : "en";
-    return getDictionary(loc);
-}
-
 export async function updateDisplayName(
     displayName: string,
     locale: string,
 ): Promise<{ error?: string }> {
-    const d = dictForLocale(locale);
+    const d = getDictionaryForLocale(locale);
     const trimmed = displayName.trim();
     if (trimmed.length < MIN_LEN || trimmed.length > MAX_LEN) {
         return {

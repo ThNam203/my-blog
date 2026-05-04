@@ -3,12 +3,18 @@ import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { Database } from "./types";
 
+function requireEnv(name: string): string {
+    const value = process.env[name];
+    if (!value) throw new Error(`Missing required environment variable: ${name}`);
+    return value;
+}
+
 export async function createClient() {
     const cookieStore = await cookies();
 
     return createServerClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        requireEnv("NEXT_PUBLIC_SUPABASE_URL"),
+        requireEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
         {
             cookies: {
                 getAll() {
@@ -30,8 +36,8 @@ export async function createClient() {
 
 export function createAdminClient() {
     return createSupabaseClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        requireEnv("NEXT_PUBLIC_SUPABASE_URL"),
+        requireEnv("SUPABASE_SERVICE_ROLE_KEY"),
         { auth: { autoRefreshToken: false, persistSession: false } },
     );
 }
