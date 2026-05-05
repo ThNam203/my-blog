@@ -12,7 +12,7 @@ const DateFormatter = ({ dateString, locale = "vi" }: Props) => {
     const dateLocale = locale === "vi" ? viLocale : enUS;
 
     return (
-        <time dateTime={dateString}>{format(date, "LLLL d, yyyy", { locale: dateLocale })}</time>
+        <time dateTime={dateString}>{format(date, "LLLL d, yyyy HH:mm", { locale: dateLocale })}</time>
     );
 };
 
