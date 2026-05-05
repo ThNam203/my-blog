@@ -35,4 +35,9 @@ export const MUSIC_TRACKS: MusicTrack[] = [
         title: "Không bằng",
         artist: "Na",
     },
+    {
+        src: "/music/sai_gon_hom_nay_mua.mp3",
+        title: "Sài Gòn hôm nay mưa",
+        artist: "JSOL, Hoàng Duyên",
+    },
 ];
