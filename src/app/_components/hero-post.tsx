@@ -2,8 +2,10 @@ import Avatar from "@/app/_components/avatar";
 import CoverImage from "@/app/_components/cover-image";
 import { type Locale } from "@/i18n/config";
 import { type Author } from "@/interfaces/author";
+import { type PostAddress } from "@/interfaces/post";
 import Link from "next/link";
 import DateFormatter from "./date-formatter";
+import { PostAddress as PostAddressDetails } from "./post-address";
 import { PostCategories } from "./post-categories";
 
 type Props = {
@@ -15,6 +17,7 @@ type Props = {
     author: Author;
     slug: string;
     locale: Locale;
+    addresses?: PostAddress[];
 };
 
 export function HeroPost({
@@ -26,6 +29,7 @@ export function HeroPost({
     author,
     slug,
     locale,
+    addresses,
 }: Props) {
     return (
         <section>
@@ -42,9 +46,14 @@ export function HeroPost({
                             {title}
                         </Link>
                     </h3>
-                    <div className="mb-4 md:mb-0 text-lg">
+                    <div className="mb-4 text-lg">
                         <DateFormatter dateString={date} locale={locale} />
                     </div>
+                    {addresses && addresses.length > 0 ? (
+                        <div className="mb-4">
+                            <PostAddressDetails addresses={addresses} />
+                        </div>
+                    ) : null}
                 </div>
                 <div>
                     <p className="text-lg leading-relaxed mb-4">{excerpt}</p>

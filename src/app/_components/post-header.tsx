@@ -15,10 +15,18 @@ type Props = {
     date: string;
     author: Author;
     locale: Locale;
-    address?: PostAddressType;
+    addresses?: PostAddressType[];
 };
 
-export function PostHeader({ title, categories, coverImage, date, author, locale, address }: Props) {
+export function PostHeader({
+    title,
+    categories,
+    coverImage,
+    date,
+    author,
+    locale,
+    addresses,
+}: Props) {
     return (
         <>
             <PostTitle>{title}</PostTitle>
@@ -38,9 +46,9 @@ export function PostHeader({ title, categories, coverImage, date, author, locale
                 <div className="mb-6 text-lg">
                     <DateFormatter dateString={date} locale={locale} />
                 </div>
-                {address && (
+                {addresses && addresses.length > 0 && (
                     <div className="mb-6">
-                        <PostAddress address={address} />
+                        <PostAddress addresses={addresses} />
                     </div>
                 )}
             </div>

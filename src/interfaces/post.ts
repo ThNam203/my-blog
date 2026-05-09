@@ -20,5 +20,5 @@ export type Post = {
     };
     content: string;
     preview?: boolean;
-    address?: PostAddress;
+    addresses?: PostAddress[];
 };

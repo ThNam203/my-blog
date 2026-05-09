@@ -39,6 +39,7 @@ export default async function Index({ params }: Props) {
                 slug={heroPost.slug}
                 excerpt={heroPost.excerpt}
                 locale={locale}
+                addresses={heroPost.addresses}
             />
             {morePosts.length > 0 && (
                 <MoreStories posts={morePosts} locale={locale} title={dictionary.ui.moreStories} />

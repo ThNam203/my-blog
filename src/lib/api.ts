@@ -1,4 +1,4 @@
-import { Post } from "@/interfaces/post";
+import { Post, type PostAddress } from "@/interfaces/post";
 import { defaultLocale, isValidLocale, type Locale } from "@/i18n/config";
 import fs from "fs";
 import matter from "gray-matter";
@@ -21,6 +21,24 @@ function normalizeCategories(value: unknown): string[] {
 
     if (typeof value === "string" && value.trim()) {
         return [value.trim()];
+    }
+
+    return [];
+}
+
+function isPostAddress(value: unknown): value is PostAddress {
+    if (!value || typeof value !== "object") {
+        return false;
+    }
+
+    const candidate = value as Record<string, unknown>;
+    return typeof candidate.name === "string" && typeof candidate.address === "string";
+}
+
+function normalizeAddresses(data: Record<string, unknown>): PostAddress[] {
+    const addressesValue = data.addresses;
+    if (Array.isArray(addressesValue)) {
+        return addressesValue.filter(isPostAddress);
     }
 
     return [];
@@ -56,10 +74,12 @@ export function getPostBySlug(slug: string, locale: string = defaultLocale) {
 
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
+    const addresses = normalizeAddresses(data);
 
     return {
         ...data,
         categories: normalizeCategories(data.categories),
+        addresses,
         slug: realSlug,
         content,
     } as Post;
