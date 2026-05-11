@@ -5,7 +5,7 @@ import Footer from "@/app/_components/footer";
 import { SiteMusicPlayer } from "@/app/_components/site-music-player";
 import { HeaderSiteMenu } from "@/app/_components/header-site-menu";
 import { LETSLIVE_URL, WEB_DEFAULT_INSTAGRAM_URL } from "@/lib/constants";
-import { getAuthModalLabels, getDictionary } from "@/i18n/dictionaries";
+import { getAuthModalLabels, getDictionary, getSearchDialogLabels } from "@/i18n/dictionaries";
 import { isValidLocale, type Locale } from "@/i18n/config";
 import { createClient } from "@/lib/supabase/server";
 import { MUSIC_TRACKS } from "@/lib/music-tracks";
@@ -93,6 +93,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                             profile: dictionary.ui.headerMenuProfile,
                         }}
                         authModal={getAuthModalLabels(dictionary)}
+                        searchDialog={getSearchDialogLabels(dictionary)}
                     />
                 </div>
             </header>

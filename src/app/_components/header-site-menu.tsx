@@ -5,8 +5,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AuthModal, type AuthModalTab } from "@/app/_components/comments/auth-modal";
+import { SiteSearchDialog, SearchGlyph } from "@/app/_components/site-search-dialog";
 import { signOut } from "@/lib/actions/auth";
-import type { AuthModalLabels } from "@/i18n/dictionaries";
+import type { AuthModalLabels, SearchDialogLabels } from "@/i18n/dictionaries";
 import { defaultLocale, type Locale } from "@/i18n/config";
 import { swapLocaleInPathname } from "@/i18n/swap-locale-path";
 import {
@@ -69,6 +70,7 @@ type Props = {
         profile: string;
     };
     authModal: AuthModalLabels;
+    searchDialog: SearchDialogLabels;
 };
 
 export function HeaderSiteMenu({
@@ -81,11 +83,13 @@ export function HeaderSiteMenu({
     themeLabels,
     labels,
     authModal,
+    searchDialog,
 }: Props) {
     const router = useRouter();
     const pathname = usePathname() ?? `/${defaultLocale}`;
     const [menuOpen, setMenuOpen] = useState(false);
     const [authSession, setAuthSession] = useState<{ tab: AuthModalTab; id: number } | null>(null);
+    const [searchOpen, setSearchOpen] = useState(false);
     const rootRef = useRef<HTMLDivElement>(null);
     const { mode, setMode, isMounted } = useColorSchemePreference();
 
@@ -132,7 +136,23 @@ export function HeaderSiteMenu({
         cn(menuItemClass, active && "bg-neutral-100 font-medium dark:bg-slate-800");
 
     return (
-        <div ref={rootRef} className="relative">
+        <div ref={rootRef} className="relative flex items-center gap-2">
+            <button
+                type="button"
+                className={cn(
+                    "flex h-9 w-9 items-center justify-center rounded-full border border-neutral-300 bg-white",
+                    "outline-none ring-offset-2 transition-colors hover:bg-neutral-50",
+                    "focus-visible:ring-2 focus-visible:ring-neutral-400 dark:border-slate-600",
+                    "dark:bg-slate-900 dark:hover:bg-slate-800 dark:ring-offset-slate-950",
+                    "dark:focus-visible:ring-slate-500",
+                )}
+                aria-label={searchDialog.openAria}
+                aria-expanded={searchOpen}
+                aria-haspopup="dialog"
+                onClick={() => setSearchOpen(true)}
+            >
+                <SearchGlyph className="h-4 w-4 text-neutral-700 dark:text-slate-200" />
+            </button>
             <button
                 type="button"
                 className={cn(
@@ -262,6 +282,13 @@ export function HeaderSiteMenu({
                     onClose={() => setAuthSession(null)}
                 />
             )}
+
+            <SiteSearchDialog
+                open={searchOpen}
+                onClose={() => setSearchOpen(false)}
+                locale={locale}
+                labels={searchDialog}
+            />
         </div>
     );
 }

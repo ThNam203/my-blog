@@ -100,8 +100,47 @@ export type Dictionary = {
         confessionsSuccess: string;
         confessionsEmpty: string;
         reactionsLabel: string;
+        searchOpenAria: string;
+        searchDialogTitle: string;
+        searchScopeHint: string;
+        searchPlaceholder: string;
+        searchTypeToStart: string;
+        searchLoading: string;
+        searchError: string;
+        searchNoResults: string;
+        searchResultsCount: string;
+        searchCloseAria: string;
     };
 };
+
+export type SearchDialogLabels = {
+    openAria: string;
+    dialogTitle: string;
+    scopeHint: string;
+    placeholder: string;
+    typeToStart: string;
+    loading: string;
+    error: string;
+    noResults: string;
+    resultsCount: string;
+    closeAria: string;
+};
+
+export function getSearchDialogLabels(d: Dictionary): SearchDialogLabels {
+    const u = d.ui;
+    return {
+        openAria: u.searchOpenAria,
+        dialogTitle: u.searchDialogTitle,
+        scopeHint: u.searchScopeHint,
+        placeholder: u.searchPlaceholder,
+        typeToStart: u.searchTypeToStart,
+        loading: u.searchLoading,
+        error: u.searchError,
+        noResults: u.searchNoResults,
+        resultsCount: u.searchResultsCount,
+        closeAria: u.searchCloseAria,
+    };
+}
 
 export type AuthModalLabels = {
     tabLogin: string;
@@ -248,6 +287,16 @@ const dictionaries: Record<Locale, Dictionary> = {
             confessionsSuccess: "Đã gửi confession.",
             confessionsEmpty: "Chưa có confession nào. Hãy là người đầu tiên!",
             reactionsLabel: "Cảm nhận của bạn về bài viết này?",
+            searchOpenAria: "Mở tìm kiếm bài viết",
+            searchDialogTitle: "Tìm kiếm bài viết",
+            searchScopeHint: "Tìm trong tiêu đề, mô tả, ngày, chủ đề và địa điểm.",
+            searchPlaceholder: "Nhập từ khóa…",
+            searchTypeToStart: "Hãy nhập gì đó để bắt đầu tìm kiếm.",
+            searchLoading: "Đang tải…",
+            searchError: "Không tải được danh sách bài viết. Vui lòng thử lại.",
+            searchNoResults: "Không tìm thấy bài viết nào phù hợp.",
+            searchResultsCount: "{count} kết quả",
+            searchCloseAria: "Đóng tìm kiếm",
         },
     },
     en: {
@@ -358,6 +407,16 @@ const dictionaries: Record<Locale, Dictionary> = {
             confessionsSuccess: "Confession posted.",
             confessionsEmpty: "No confessions yet. Be the first!",
             reactionsLabel: "How did this post make you feel?",
+            searchOpenAria: "Open post search",
+            searchDialogTitle: "Search posts",
+            searchScopeHint: "Searches title, excerpt, date, categories, and places.",
+            searchPlaceholder: "Type to search…",
+            searchTypeToStart: "Type something to start searching.",
+            searchLoading: "Loading…",
+            searchError: "Could not load posts. Please try again.",
+            searchNoResults: "No posts match your search.",
+            searchResultsCount: "{count} results",
+            searchCloseAria: "Close search",
         },
     },
 };
