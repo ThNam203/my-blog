@@ -20,6 +20,16 @@ export async function CommentSection({ postSlug, locale }: Props) {
         ? getDictionary(locale as Locale)
         : getDictionary("en");
 
+    let currentDisplayName: string | null = null;
+    if (user) {
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("display_name")
+            .eq("id", user.id)
+            .maybeSingle();
+        currentDisplayName = profile?.display_name ?? null;
+    }
+
     return (
         <CommentList
             comments={comments}
@@ -27,6 +37,7 @@ export async function CommentSection({ postSlug, locale }: Props) {
             locale={locale}
             currentUserId={user?.id ?? null}
             currentUserEmail={user?.email ?? null}
+            currentUserDisplayName={currentDisplayName}
             adminEmail={adminEmail}
             signInToCommentLabel={dictionary.ui.commentsSignInToComment}
             commentsTitle={dictionary.ui.commentsTitle}

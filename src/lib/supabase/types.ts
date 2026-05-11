@@ -34,9 +34,7 @@ export type Database = {
                     body: string;
                     created_at?: string;
                 };
-                Update: {
-                    body?: string;
-                };
+                Update: Record<string, never>;
                 Relationships: [];
             };
             confessions: {

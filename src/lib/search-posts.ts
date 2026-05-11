@@ -20,6 +20,20 @@ export function toSlimPost(post: Post): SlimPost {
     };
 }
 
+const COMBINING_MARKS = /[̀-ͯ]/g;
+
+export function stripDiacritics(value: string): string {
+    return value
+        .normalize("NFD")
+        .replace(COMBINING_MARKS, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D");
+}
+
+export function foldForSearch(value: string): string {
+    return stripDiacritics(value).toLowerCase();
+}
+
 function addressToHaystackParts(address: PostAddress): string[] {
     const parts = [address.name, address.address];
     if (address.link) parts.push(address.link);
@@ -32,11 +46,11 @@ export function buildHaystack(post: SlimPost): string {
     for (const address of post.addresses) {
         parts.push(...addressToHaystackParts(address));
     }
-    return parts.filter(Boolean).join(" \u0001 ").toLowerCase();
+    return foldForSearch(parts.filter(Boolean).join("  "));
 }
 
 export function normalizeQuery(query: string): string {
-    return query.trim().toLowerCase();
+    return foldForSearch(query.trim());
 }
 
 export function matchesQuery(haystack: string, normalizedQuery: string): boolean {
@@ -48,4 +62,47 @@ export function filterSlimPostsByQuery(posts: SlimPost[], query: string): SlimPo
     const normalized = normalizeQuery(query);
     if (!normalized) return [];
     return posts.filter((post) => matchesQuery(buildHaystack(post), normalized));
+}
+
+export type MatchRange = { start: number; end: number };
+
+export function findAccentInsensitiveMatch(
+    original: string,
+    query: string,
+): MatchRange | null {
+    const foldedQuery = foldForSearch(query);
+    if (!foldedQuery) return null;
+    if (!original) return null;
+
+    const length = original.length;
+    for (let start = 0; start < length; start++) {
+        let i = start;
+        let j = 0;
+        while (i < length && j < foldedQuery.length) {
+            const ch = foldForSearch(original[i]);
+            if (ch.length === 0) {
+                i++;
+                continue;
+            }
+            if (ch.length === 1) {
+                if (ch === foldedQuery[j]) {
+                    i++;
+                    j++;
+                } else {
+                    break;
+                }
+            } else {
+                if (foldedQuery.startsWith(ch, j)) {
+                    i++;
+                    j += ch.length;
+                } else {
+                    break;
+                }
+            }
+        }
+        if (j === foldedQuery.length) {
+            return { start, end: i };
+        }
+    }
+    return null;
 }

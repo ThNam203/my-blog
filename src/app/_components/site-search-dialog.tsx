@@ -2,18 +2,21 @@
 
 import cn from "classnames";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { type Locale } from "@/i18n/config";
 import { type SearchDialogLabels } from "@/i18n/dictionaries";
 import {
     filterSlimPostsByQuery,
+    findAccentInsensitiveMatch,
     type SlimPost,
 } from "@/lib/search-posts";
 import type { SearchIndexResponse } from "@/app/api/posts/search-index/route";
 import DateFormatter from "./date-formatter";
 import { PostCategories } from "./post-categories";
 
-const DEBOUNCE_MS = 500;
+const DEBOUNCE_MS = 200;
+const RECENT_LIMIT = 5;
+const RECENT_KEY_PREFIX = "lovvit-blog:recent-searches:";
 
 type LoadState =
     | { kind: "idle" }
@@ -28,14 +31,46 @@ type Props = {
     labels: SearchDialogLabels;
 };
 
+function recentKey(locale: Locale) {
+    return `${RECENT_KEY_PREFIX}${locale}`;
+}
+
+function readRecent(locale: Locale): string[] {
+    if (typeof window === "undefined") return [];
+    try {
+        const raw = window.localStorage.getItem(recentKey(locale));
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter((v): v is string => typeof v === "string").slice(0, RECENT_LIMIT);
+    } catch {
+        return [];
+    }
+}
+
+function writeRecent(locale: Locale, list: string[]) {
+    if (typeof window === "undefined") return;
+    try {
+        window.localStorage.setItem(recentKey(locale), JSON.stringify(list.slice(0, RECENT_LIMIT)));
+    } catch {
+        // ignore quota/serialization failures
+    }
+}
+
 export function SiteSearchDialog({ open, onClose, locale, labels }: Props) {
     const [loadState, setLoadState] = useState<LoadState>({ kind: "idle" });
     const [inputValue, setInputValue] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
+    const [recent, setRecent] = useState<string[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
     const loadStateRef = useRef<LoadState>(loadState);
     loadStateRef.current = loadState;
     const inFlightRef = useRef(false);
+
+    useEffect(() => {
+        if (!open) return;
+        setRecent(readRecent(locale));
+    }, [open, locale]);
 
     useEffect(() => {
         if (!open) return;
@@ -100,6 +135,34 @@ export function SiteSearchDialog({ open, onClose, locale, labels }: Props) {
         return filterSlimPostsByQuery(loadState.posts, debouncedQuery);
     }, [loadState, debouncedQuery]);
 
+    const commitRecent = useCallback(
+        (query: string) => {
+            const trimmed = query.trim();
+            if (!trimmed) return;
+            const filtered = recent.filter((entry) => entry !== trimmed);
+            const next = [trimmed, ...filtered].slice(0, RECENT_LIMIT);
+            setRecent(next);
+            writeRecent(locale, next);
+        },
+        [locale, recent],
+    );
+
+    const handleResultSelect = useCallback(() => {
+        commitRecent(debouncedQuery);
+        onClose();
+    }, [commitRecent, debouncedQuery, onClose]);
+
+    const handlePickRecent = useCallback((entry: string) => {
+        setInputValue(entry);
+        setDebouncedQuery(entry);
+        inputRef.current?.focus();
+    }, []);
+
+    const handleClearRecent = useCallback(() => {
+        setRecent([]);
+        writeRecent(locale, []);
+    }, [locale]);
+
     if (!open) return null;
 
     function handleBackdropClick(event: React.MouseEvent) {
@@ -131,6 +194,7 @@ export function SiteSearchDialog({ open, onClose, locale, labels }: Props) {
                         placeholder={labels.placeholder}
                         className={cn(
                             "flex-1 bg-transparent text-base outline-none",
+                            "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
                             "placeholder:text-neutral-400 dark:placeholder:text-neutral-500",
                         )}
                         aria-label={labels.dialogTitle}
@@ -155,7 +219,10 @@ export function SiteSearchDialog({ open, onClose, locale, labels }: Props) {
                     results={results}
                     locale={locale}
                     labels={labels}
-                    onSelect={onClose}
+                    recent={recent}
+                    onSelect={handleResultSelect}
+                    onPickRecent={handlePickRecent}
+                    onClearRecent={handleClearRecent}
                 />
             </div>
         </div>
@@ -168,7 +235,10 @@ type ResultBodyProps = {
     results: SlimPost[];
     locale: Locale;
     labels: SearchDialogLabels;
+    recent: string[];
     onSelect: () => void;
+    onPickRecent: (entry: string) => void;
+    onClearRecent: () => void;
 };
 
 function SearchResultBody({
@@ -177,7 +247,10 @@ function SearchResultBody({
     results,
     locale,
     labels,
+    recent,
     onSelect,
+    onPickRecent,
+    onClearRecent,
 }: ResultBodyProps) {
     const trimmedQuery = debouncedQuery.trim();
 
@@ -190,7 +263,42 @@ function SearchResultBody({
     }
 
     if (!trimmedQuery) {
-        return <StatusMessage>{labels.typeToStart}</StatusMessage>;
+        if (recent.length === 0) {
+            return <StatusMessage>{labels.typeToStart}</StatusMessage>;
+        }
+        return (
+            <div className="px-4 pt-3 pb-4">
+                <div className="mb-2 flex items-center justify-between">
+                    <p className="text-xs uppercase tracking-wide text-neutral-400">
+                        {labels.recentHeading}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={onClearRecent}
+                        className="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                    >
+                        {labels.recentClear}
+                    </button>
+                </div>
+                <ul className="flex flex-wrap gap-2">
+                    {recent.map((entry) => (
+                        <li key={entry}>
+                            <button
+                                type="button"
+                                onClick={() => onPickRecent(entry)}
+                                className={cn(
+                                    "rounded-full border px-3 py-1 text-sm",
+                                    "border-neutral-300 text-neutral-700 hover:bg-neutral-100",
+                                    "dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-800",
+                                )}
+                            >
+                                {entry}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 
     if (results.length === 0) {
@@ -227,14 +335,14 @@ function SearchResultBody({
                             className="block focus:outline-none"
                         >
                             <div className="text-base font-semibold text-neutral-900 dark:text-neutral-100">
-                                {post.title}
+                                <Highlighted text={post.title} query={trimmedQuery} />
                             </div>
                             <div className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                                 <DateFormatter dateString={post.date} locale={locale} />
                             </div>
                             {post.excerpt && (
                                 <p className="mt-1 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-300">
-                                    {post.excerpt}
+                                    <Highlighted text={post.excerpt} query={trimmedQuery} />
                                 </p>
                             )}
                         </Link>
@@ -247,6 +355,20 @@ function SearchResultBody({
                 ))}
             </ul>
         </div>
+    );
+}
+
+function Highlighted({ text, query }: { text: string; query: string }) {
+    const range = findAccentInsensitiveMatch(text, query);
+    if (!range) return <>{text}</>;
+    return (
+        <>
+            {text.slice(0, range.start)}
+            <mark className="bg-yellow-200 text-inherit dark:bg-yellow-500/40">
+                {text.slice(range.start, range.end)}
+            </mark>
+            {text.slice(range.end)}
+        </>
     );
 }
 

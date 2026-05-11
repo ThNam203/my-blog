@@ -1,5 +1,6 @@
 import Container from "@/app/_components/container";
 import { FooterQuotes } from "@/app/_components/footer-quotes";
+import { NewsletterForm } from "@/app/_components/newsletter-form";
 import type { FooterQuote } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/config";
 
@@ -13,6 +14,15 @@ type Props = {
     quotes: FooterQuote[];
     quotePrevAria: string;
     quoteNextAria: string;
+    newsletter: {
+        heading: string;
+        description: string;
+        placeholder: string;
+        submit: string;
+        submitting: string;
+        success: string;
+        genericError: string;
+    };
 };
 
 export function Footer({
@@ -25,6 +35,7 @@ export function Footer({
     quotes,
     quotePrevAria,
     quoteNextAria,
+    newsletter,
 }: Props) {
     const quoteStorageKey = `my-blog:footerQuoteIndex:${locale}`;
 
@@ -37,6 +48,18 @@ export function Footer({
                     prevAria={quotePrevAria}
                     nextAria={quoteNextAria}
                 />
+                <div className="pt-12 px-4 md:px-0 max-w-2xl mx-auto">
+                    <NewsletterForm
+                        locale={locale}
+                        heading={newsletter.heading}
+                        description={newsletter.description}
+                        placeholder={newsletter.placeholder}
+                        submitLabel={newsletter.submit}
+                        submittingLabel={newsletter.submitting}
+                        successLabel={newsletter.success}
+                        genericErrorLabel={newsletter.genericError}
+                    />
+                </div>
                 <div className="py-28 flex flex-col lg:flex-row items-center">
                     <h3
                         className="text-4xl lg:text-[2.5rem] font-bold tracking-tighter leading-tight text-center
