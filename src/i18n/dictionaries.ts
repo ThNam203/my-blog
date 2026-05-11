@@ -113,7 +113,6 @@ export type Dictionary = {
         searchRecentHeading: string;
         searchRecentClear: string;
         postReadingTime: string;
-        postTableOfContents: string;
         postRelatedHeading: string;
         newsletterHeading: string;
         newsletterDescription: string;
@@ -321,7 +320,6 @@ const dictionaries: Record<Locale, Dictionary> = {
             searchRecentHeading: "Tìm kiếm gần đây",
             searchRecentClear: "Xóa",
             postReadingTime: "Đọc khoảng {minutes} phút",
-            postTableOfContents: "Mục lục",
             postRelatedHeading: "Bài viết liên quan",
             newsletterHeading: "Đăng ký nhận bài mới",
             newsletterDescription: "Nhận email mỗi khi mình đăng bài mới. Không quảng cáo.",
@@ -458,7 +456,6 @@ const dictionaries: Record<Locale, Dictionary> = {
             searchRecentHeading: "Recent searches",
             searchRecentClear: "Clear",
             postReadingTime: "{minutes} min read",
-            postTableOfContents: "On this page",
             postRelatedHeading: "Related posts",
             newsletterHeading: "Subscribe to new posts",
             newsletterDescription: "Get an email when I post something new. No spam.",

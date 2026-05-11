@@ -1,15 +1,8 @@
 import { codeToHtml, type BundledLanguage } from "shiki";
 import { stripDiacritics } from "@/lib/search-posts";
 
-export type Heading = {
-    id: string;
-    text: string;
-    level: 2 | 3;
-};
-
 export type ProcessedPost = {
     html: string;
-    headings: Heading[];
 };
 
 export function slugify(value: string): string {
@@ -102,25 +95,24 @@ export async function processPostHtmlAsync(html: string): Promise<ProcessedPost>
 }
 
 export function processPostHtml(html: string): ProcessedPost {
-    const headings: Heading[] = [];
     const seen = new Map<string, number>();
+    let sectionIndex = 0;
 
     const processed = html.replace(
         /<(h2|h3)([^>]*)>([\s\S]*?)<\/\1>/gi,
         (_match, tag: string, attrs: string, inner: string) => {
-            const level = tag.toLowerCase() === "h2" ? 2 : 3;
             const text = decodeEntities(stripTags(inner)).trim();
-            const base = slugify(text) || `section-${headings.length + 1}`;
+            sectionIndex += 1;
+            const base = slugify(text) || `section-${sectionIndex}`;
             const count = seen.get(base) ?? 0;
             const id = count === 0 ? base : `${base}-${count}`;
             seen.set(base, count + 1);
-            headings.push({ id, text, level: level as 2 | 3 });
             const anchorLabel = decodeEntities(stripTags(inner)).replace(/"/g, "&quot;").trim();
             return `<${tag}${attrs} id="${id}"><a class="post-heading-anchor" href="#${id}" aria-label="${anchorLabel}">#</a>${inner}</${tag}>`;
         },
     );
 
-    return { html: processed, headings };
+    return { html: processed };
 }
 
 const WORDS_PER_MINUTE = 200;

@@ -194,6 +194,7 @@ export function SiteSearchDialog({ open, onClose, locale, labels }: Props) {
                         placeholder={labels.placeholder}
                         className={cn(
                             "flex-1 bg-transparent text-base outline-none",
+                            "[&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden",
                             "placeholder:text-neutral-400 dark:placeholder:text-neutral-500",
                         )}
                         aria-label={labels.dialogTitle}

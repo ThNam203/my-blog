@@ -21,8 +21,6 @@ impact-vs-effort for a personal blog.
 - **Reading time** estimate from a word-count heuristic, shown in the post
   header.
 - **Scroll progress bar** pinned at the top of `[locale]/posts/[slug]`.
-- **Table of contents** generated from `h2` / `h3` headings, sticky on
-  desktop.
 - **Code syntax highlighting** via `rehype-pretty-code` / `shiki` for when
   posts contain code blocks.
 - **Image lightbox** / click-to-zoom for inline images.
@@ -58,7 +56,7 @@ impact-vs-effort for a personal blog.
 If picking only three to ship next:
 
 1. Accent-insensitive search + `Cmd-K` + recent searches.
-2. Reading time + table of contents.
-3. RSS + sitemap.
+2. RSS + sitemap.
+3. Image lightbox or per-post OG images.
 
 Each is roughly one self-contained PR.

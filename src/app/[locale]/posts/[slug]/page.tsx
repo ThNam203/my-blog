@@ -9,7 +9,6 @@ import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
 import { PostReactions } from "@/app/_components/post-reactions";
 import { ScrollProgress } from "@/app/_components/scroll-progress";
-import { TableOfContents } from "@/app/_components/table-of-contents";
 import { RelatedPosts } from "@/app/_components/related-posts";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
@@ -34,7 +33,7 @@ export default async function Post(props: Params) {
     }
 
     const rawHtml = await markdownToHtml(post.content || "");
-    const { html, headings } = await processPostHtmlAsync(rawHtml);
+    const { html } = await processPostHtmlAsync(rawHtml);
     const readingMinutes = estimateReadingMinutes(post.content || "");
     const dictionary = getDictionary(params.locale);
     const related = getRelatedPosts(params.slug, params.locale);
@@ -43,28 +42,20 @@ export default async function Post(props: Params) {
         <main>
             <ScrollProgress />
             <Container>
-                <div className="xl:grid xl:grid-cols-[1fr_15rem] xl:gap-8">
-                    <article className="mb-32 min-w-0">
-                        <PostHeader
-                            title={post.title}
-                            categories={post.categories}
-                            coverImage={post.coverImage}
-                            date={post.date}
-                            author={post.author}
-                            locale={params.locale}
-                            addresses={post.addresses}
-                            readingMinutes={readingMinutes}
-                            readingTimeLabel={dictionary.ui.postReadingTime}
-                        />
-                        <PostBody content={html} />
-                    </article>
-                    <aside className="hidden xl:block">
-                        <TableOfContents
-                            headings={headings}
-                            label={dictionary.ui.postTableOfContents}
-                        />
-                    </aside>
-                </div>
+                <article className="mb-32 min-w-0">
+                    <PostHeader
+                        title={post.title}
+                        categories={post.categories}
+                        coverImage={post.coverImage}
+                        date={post.date}
+                        author={post.author}
+                        locale={params.locale}
+                        addresses={post.addresses}
+                        readingMinutes={readingMinutes}
+                        readingTimeLabel={dictionary.ui.postReadingTime}
+                    />
+                    <PostBody content={html} />
+                </article>
                 <PostReactions
                     postSlug={params.slug}
                     reactionLabel={dictionary.ui.reactionsLabel}

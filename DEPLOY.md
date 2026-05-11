@@ -63,7 +63,7 @@ openssl rand -hex 32
 
 ## Not deployed by this commit
 
-- Code syntax highlighting + image lightbox + TOC scroll-spy work without config.
+- Code syntax highlighting + image lightbox work without config.
 - `npm run new-post -- "Title" -c category` runs locally only.
 
 ## Don'ts
