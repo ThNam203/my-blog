@@ -10,9 +10,40 @@
 }
 
 .markdown h2 {
-    @apply text-3xl mt-12 mb-4 leading-snug;
+    @apply text-3xl mt-12 mb-4 leading-snug scroll-mt-24;
 }
 
 .markdown h3 {
-    @apply text-2xl mt-8 mb-4 leading-snug;
+    @apply text-2xl mt-8 mb-4 leading-snug scroll-mt-24;
+}
+
+.markdown img {
+    @apply cursor-zoom-in;
+}
+
+.markdown pre.shiki {
+    @apply my-6 rounded-lg overflow-x-auto p-4 text-sm leading-relaxed;
+}
+
+.markdown pre.shiki code {
+    @apply font-mono;
+}
+
+:global(.dark) .markdown pre.shiki,
+:global(.dark) .markdown pre.shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+.markdown :global(.post-heading-anchor) {
+    @apply text-neutral-300 dark:text-neutral-600 no-underline opacity-0 transition-opacity mr-2 -ml-6 inline-block;
+}
+
+.markdown h2:hover :global(.post-heading-anchor),
+.markdown h3:hover :global(.post-heading-anchor),
+.markdown :global(.post-heading-anchor):focus {
+    @apply opacity-100;
 }

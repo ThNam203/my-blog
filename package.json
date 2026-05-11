@@ -4,7 +4,8 @@
         "dev": "next dev --turbopack",
         "lint": "eslint .",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "new-post": "jiti scripts/new-post.ts"
     },
     "dependencies": {
         "@supabase/ssr": "^0.10.2",
@@ -19,7 +20,9 @@
         "react-dom": "^19",
         "react-toastify": "^11.1.0",
         "remark": "^15.0.1",
-        "remark-html": "^16.0.1"
+        "remark-html": "^16.0.1",
+        "shiki": "^4.0.2",
+        "zod": "^4.4.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.4",

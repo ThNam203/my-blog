@@ -1,64 +1,80 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { deleteComment } from "@/lib/actions/comments";
-import { CommentForm } from "./comment-form";
+import { useState } from "react";
 import { Comment } from "@/lib/supabase/types";
+import { CommentForm } from "./comment-form";
+import { CommentBody } from "./comment-body";
 
 type Props = {
     comment: Comment;
     replies: Comment[];
-    postSlug: string;
     locale: string;
     currentUserId: string | null;
     isAdmin: boolean;
     replyPlaceholderTemplate: string;
     postLabel: string;
     postingLabel: string;
-    postedSuccessLabel: string;
     cancelLabel: string;
     anonymousLabel: string;
     replyLabel: string;
     deleteLabel: string;
     deleteCommentAria: string;
     deleteReplyAria: string;
+    editLabel: string;
+    editSaveLabel: string;
+    editCancelLabel: string;
+    editedLabel: string;
+    onReply: (body: string) => Promise<void> | void;
+    onEdit: (id: string, body: string) => Promise<void> | void;
+    onDelete: (id: string) => Promise<void> | void;
 };
+
+const markdownClass =
+    "comment-markdown whitespace-pre-wrap text-sm leading-relaxed [&>pre]:my-2 [&>pre]:rounded [&>pre]:bg-neutral-200 [&>pre]:dark:bg-neutral-900 [&>pre]:p-2 [&>pre]:overflow-x-auto [&_code]:rounded [&_code]:bg-neutral-200 [&_code]:dark:bg-neutral-900 [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs [&_a]:underline [&_a]:underline-offset-2";
 
 export function CommentItem({
     comment,
     replies,
-    postSlug,
     locale,
     currentUserId,
     isAdmin,
     replyPlaceholderTemplate,
     postLabel,
     postingLabel,
-    postedSuccessLabel,
     cancelLabel,
     anonymousLabel,
     replyLabel,
     deleteLabel,
     deleteCommentAria,
     deleteReplyAria,
+    editLabel,
+    editSaveLabel,
+    editCancelLabel,
+    editedLabel,
+    onReply,
+    onEdit,
+    onDelete,
 }: Props) {
     const [showReplyForm, setShowReplyForm] = useState(false);
-    const [isPending, startTransition] = useTransition();
+    const [isEditing, setIsEditing] = useState(false);
 
-    const canDelete = isAdmin || currentUserId === comment.user_id;
-
-    function handleDelete() {
-        startTransition(async () => {
-            await deleteComment(comment.id, postSlug, locale);
-        });
-    }
-
+    const canMutate = isAdmin || currentUserId === comment.user_id;
     const displayName = comment.profiles?.display_name ?? anonymousLabel;
     const initial = (displayName[0] ?? "?").toUpperCase();
     const formattedDate = new Date(comment.created_at).toLocaleDateString(
         locale === "vi" ? "vi-VN" : "en-US",
         { year: "numeric", month: "short", day: "numeric" },
     );
+
+    async function handleReplySubmit(body: string) {
+        await onReply(body);
+        setShowReplyForm(false);
+    }
+
+    async function handleEditSubmit(body: string) {
+        await onEdit(comment.id, body);
+        setIsEditing(false);
+    }
 
     return (
         <div className="flex flex-col gap-2">
@@ -70,21 +86,46 @@ export function CommentItem({
                         </div>
                         <span className="text-sm font-semibold">{displayName}</span>
                         <span className="text-xs text-neutral-400">{formattedDate}</span>
+                        {comment.updated_at && (
+                            <span className="text-xs text-neutral-400 italic">{editedLabel}</span>
+                        )}
                     </div>
-                    {canDelete && (
-                        <button
-                            type="button"
-                            onClick={handleDelete}
-                            disabled={isPending}
-                            className="text-xs text-neutral-400 transition-colors hover:text-red-500 disabled:opacity-50"
-                            aria-label={deleteCommentAria}
-                        >
-                            {deleteLabel}
-                        </button>
+                    {canMutate && !isEditing && (
+                        <div className="flex items-center gap-2">
+                            {currentUserId === comment.user_id && (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditing(true)}
+                                    className="text-xs text-neutral-400 transition-colors hover:text-neutral-700 dark:hover:text-neutral-200"
+                                >
+                                    {editLabel}
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                onClick={() => onDelete(comment.id)}
+                                className="text-xs text-neutral-400 transition-colors hover:text-red-500"
+                                aria-label={deleteCommentAria}
+                            >
+                                {deleteLabel}
+                            </button>
+                        </div>
                     )}
                 </div>
-                <p className="whitespace-pre-wrap text-sm leading-relaxed">{comment.body}</p>
-                {currentUserId && (
+                {isEditing ? (
+                    <CommentForm
+                        placeholder=""
+                        postLabel={editSaveLabel}
+                        postingLabel={postingLabel}
+                        cancelLabel={editCancelLabel}
+                        initialValue={comment.body}
+                        onSubmit={handleEditSubmit}
+                        onCancel={() => setIsEditing(false)}
+                    />
+                ) : (
+                    <CommentBody body={comment.body} className={markdownClass} />
+                )}
+                {currentUserId && !isEditing && (
                     <button
                         type="button"
                         onClick={() => setShowReplyForm((v) => !v)}
@@ -107,10 +148,16 @@ export function CommentItem({
                                 locale={locale}
                                 currentUserId={currentUserId}
                                 isAdmin={isAdmin}
-                                postSlug={postSlug}
                                 anonymousLabel={anonymousLabel}
                                 deleteLabel={deleteLabel}
                                 deleteReplyAria={deleteReplyAria}
+                                editLabel={editLabel}
+                                editSaveLabel={editSaveLabel}
+                                editCancelLabel={editCancelLabel}
+                                editedLabel={editedLabel}
+                                postingLabel={postingLabel}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
                             />
                         </div>
                     ))}
@@ -120,15 +167,12 @@ export function CommentItem({
             {showReplyForm && currentUserId && (
                 <div className="ml-8">
                     <CommentForm
-                        postSlug={postSlug}
-                        locale={locale}
-                        parentId={comment.id}
                         placeholder={replyPlaceholderTemplate.replaceAll("{name}", displayName)}
                         postLabel={postLabel}
                         postingLabel={postingLabel}
-                        postedSuccessLabel={postedSuccessLabel}
                         cancelLabel={cancelLabel}
-                        onSuccess={() => setShowReplyForm(false)}
+                        onSubmit={handleReplySubmit}
+                        onCancel={() => setShowReplyForm(false)}
                     />
                 </div>
             )}
@@ -141,28 +185,45 @@ function ReplyRow({
     locale,
     currentUserId,
     isAdmin,
-    postSlug,
     anonymousLabel,
     deleteLabel,
     deleteReplyAria,
+    editLabel,
+    editSaveLabel,
+    editCancelLabel,
+    editedLabel,
+    postingLabel,
+    onEdit,
+    onDelete,
 }: {
     reply: Comment;
     locale: string;
     currentUserId: string | null;
     isAdmin: boolean;
-    postSlug: string;
     anonymousLabel: string;
     deleteLabel: string;
     deleteReplyAria: string;
+    editLabel: string;
+    editSaveLabel: string;
+    editCancelLabel: string;
+    editedLabel: string;
+    postingLabel: string;
+    onEdit: (id: string, body: string) => Promise<void> | void;
+    onDelete: (id: string) => Promise<void> | void;
 }) {
-    const [isPending, startTransition] = useTransition();
-    const canDelete = isAdmin || currentUserId === reply.user_id;
+    const [isEditing, setIsEditing] = useState(false);
+    const canMutate = isAdmin || currentUserId === reply.user_id;
     const displayName = reply.profiles?.display_name ?? anonymousLabel;
     const initial = (displayName[0] ?? "?").toUpperCase();
     const formattedDate = new Date(reply.created_at).toLocaleDateString(
         locale === "vi" ? "vi-VN" : "en-US",
         { year: "numeric", month: "short", day: "numeric" },
     );
+
+    async function handleEditSubmit(body: string) {
+        await onEdit(reply.id, body);
+        setIsEditing(false);
+    }
 
     return (
         <>
@@ -173,24 +234,48 @@ function ReplyRow({
                     </div>
                     <span className="text-sm font-semibold">{displayName}</span>
                     <span className="text-xs text-neutral-400">{formattedDate}</span>
+                    {reply.updated_at && (
+                        <span className="text-xs text-neutral-400 italic">{editedLabel}</span>
+                    )}
                 </div>
-                {canDelete && (
-                    <button
-                        type="button"
-                        onClick={() =>
-                            startTransition(async () => {
-                                await deleteComment(reply.id, postSlug, locale);
-                            })
-                        }
-                        disabled={isPending}
-                        className="text-xs text-neutral-400 transition-colors hover:text-red-500 disabled:opacity-50"
-                        aria-label={deleteReplyAria}
-                    >
-                        {deleteLabel}
-                    </button>
+                {canMutate && !isEditing && (
+                    <div className="flex items-center gap-2">
+                        {currentUserId === reply.user_id && (
+                            <button
+                                type="button"
+                                onClick={() => setIsEditing(true)}
+                                className="text-xs text-neutral-400 transition-colors hover:text-neutral-700 dark:hover:text-neutral-200"
+                            >
+                                {editLabel}
+                            </button>
+                        )}
+                        <button
+                            type="button"
+                            onClick={() => onDelete(reply.id)}
+                            className="text-xs text-neutral-400 transition-colors hover:text-red-500"
+                            aria-label={deleteReplyAria}
+                        >
+                            {deleteLabel}
+                        </button>
+                    </div>
                 )}
             </div>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed">{reply.body}</p>
+            {isEditing ? (
+                <CommentForm
+                    placeholder=""
+                    postLabel={editSaveLabel}
+                    postingLabel={postingLabel}
+                    cancelLabel={editCancelLabel}
+                    initialValue={reply.body}
+                    onSubmit={handleEditSubmit}
+                    onCancel={() => setIsEditing(false)}
+                />
+            ) : (
+                <CommentBody
+                    body={reply.body}
+                    className="comment-markdown whitespace-pre-wrap text-sm leading-relaxed [&_code]:rounded [&_code]:bg-neutral-200 [&_code]:dark:bg-neutral-900 [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs [&_a]:underline"
+                />
+            )}
         </>
     );
 }

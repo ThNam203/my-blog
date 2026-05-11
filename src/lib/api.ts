@@ -1,11 +1,13 @@
 import { Post, type PostAddress } from "@/interfaces/post";
 import { defaultLocale, isValidLocale, type Locale } from "@/i18n/config";
+import { validateFrontMatter } from "@/lib/post-schema";
 import fs from "fs";
 import matter from "gray-matter";
 import { join } from "path";
 
 const postsDirectory = join(process.cwd(), "_posts");
 const localizedPostsDirectory = (locale: Locale) => join(postsDirectory, locale);
+const HIDE_DRAFTS = process.env.NODE_ENV === "production";
 
 function normalizeCategories(value: unknown): string[] {
     if (!value) {
@@ -74,15 +76,22 @@ export function getPostBySlug(slug: string, locale: string = defaultLocale) {
 
     const fileContents = fs.readFileSync(fullPath, "utf8");
     const { data, content } = matter(fileContents);
+    const validated = validateFrontMatter(data, { slug: realSlug, locale });
+    if (!validated) return null;
+
     const addresses = normalizeAddresses(data);
 
-    return {
+    const post = {
         ...data,
         categories: normalizeCategories(data.categories),
         addresses,
+        draft: data.draft === true,
         slug: realSlug,
         content,
     } as Post;
+
+    if (post.draft && HIDE_DRAFTS) return null;
+    return post;
 }
 
 export function getAllPosts(locale: string = defaultLocale): Post[] {
@@ -110,4 +119,26 @@ export function getPostsByCategory(category: string, locale: string = defaultLoc
     return getAllPosts(locale).filter((post) =>
         post.categories.some((c) => c.toLowerCase() === normalized),
     );
+}
+
+export function getRelatedPosts(slug: string, locale: string = defaultLocale, limit = 3): Post[] {
+    const all = getAllPosts(locale);
+    const current = all.find((post) => post.slug === slug);
+    if (!current) return [];
+
+    const currentCategories = new Set(current.categories.map((c) => c.toLowerCase()));
+    const scored = all
+        .filter((post) => post.slug !== slug)
+        .map((post) => {
+            const shared = post.categories.filter((c) =>
+                currentCategories.has(c.toLowerCase()),
+            ).length;
+            return { post, shared };
+        })
+        .sort((a, b) => {
+            if (b.shared !== a.shared) return b.shared - a.shared;
+            return a.post.date > b.post.date ? -1 : 1;
+        });
+
+    return scored.slice(0, limit).map((entry) => entry.post);
 }

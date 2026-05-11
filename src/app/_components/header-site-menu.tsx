@@ -112,6 +112,30 @@ export function HeaderSiteMenu({
         };
     }, []);
 
+    useEffect(() => {
+        const isTypingTarget = (target: EventTarget | null): boolean => {
+            const el = target as HTMLElement | null;
+            if (!el) return false;
+            if (el.isContentEditable) return true;
+            const tag = el.tagName;
+            return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+        };
+        const handleShortcut = (event: KeyboardEvent): void => {
+            const isMeta = event.metaKey || event.ctrlKey;
+            if (isMeta && (event.key === "k" || event.key === "K")) {
+                event.preventDefault();
+                setSearchOpen(true);
+                return;
+            }
+            if (event.key === "/" && !isMeta && !event.altKey && !isTypingTarget(event.target)) {
+                event.preventDefault();
+                setSearchOpen(true);
+            }
+        };
+        document.addEventListener("keydown", handleShortcut);
+        return () => document.removeEventListener("keydown", handleShortcut);
+    }, []);
+
     function openAuth(tab: AuthModalTab) {
         setMenuOpen(false);
         setAuthSession((prev) => ({ tab, id: (prev?.id ?? 0) + 1 }));

@@ -128,6 +128,15 @@ export default async function LocaleLayout({ children, params }: Props) {
                 quotes={dictionary.ui.footerQuotes}
                 quotePrevAria={dictionary.ui.footerQuotePrevAria}
                 quoteNextAria={dictionary.ui.footerQuoteNextAria}
+                newsletter={{
+                    heading: dictionary.ui.newsletterHeading,
+                    description: dictionary.ui.newsletterDescription,
+                    placeholder: dictionary.ui.newsletterEmailPlaceholder,
+                    submit: dictionary.ui.newsletterSubmit,
+                    submitting: dictionary.ui.newsletterSubmitting,
+                    success: dictionary.ui.newsletterSuccess,
+                    genericError: dictionary.ui.newsletterErrorGeneric,
+                }}
             />
         </>
     );

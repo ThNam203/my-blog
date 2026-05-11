@@ -110,6 +110,23 @@ export type Dictionary = {
         searchNoResults: string;
         searchResultsCount: string;
         searchCloseAria: string;
+        searchRecentHeading: string;
+        searchRecentClear: string;
+        postReadingTime: string;
+        postTableOfContents: string;
+        postRelatedHeading: string;
+        newsletterHeading: string;
+        newsletterDescription: string;
+        newsletterEmailPlaceholder: string;
+        newsletterSubmit: string;
+        newsletterSubmitting: string;
+        newsletterSuccess: string;
+        newsletterErrorGeneric: string;
+        newsletterErrorInvalidEmail: string;
+        commentEdit: string;
+        commentEditSave: string;
+        commentEditCancel: string;
+        commentEdited: string;
     };
 };
 
@@ -124,6 +141,8 @@ export type SearchDialogLabels = {
     noResults: string;
     resultsCount: string;
     closeAria: string;
+    recentHeading: string;
+    recentClear: string;
 };
 
 export function getSearchDialogLabels(d: Dictionary): SearchDialogLabels {
@@ -139,6 +158,8 @@ export function getSearchDialogLabels(d: Dictionary): SearchDialogLabels {
         noResults: u.searchNoResults,
         resultsCount: u.searchResultsCount,
         closeAria: u.searchCloseAria,
+        recentHeading: u.searchRecentHeading,
+        recentClear: u.searchRecentClear,
     };
 }
 
@@ -297,6 +318,23 @@ const dictionaries: Record<Locale, Dictionary> = {
             searchNoResults: "Không tìm thấy bài viết nào phù hợp.",
             searchResultsCount: "{count} kết quả",
             searchCloseAria: "Đóng tìm kiếm",
+            searchRecentHeading: "Tìm kiếm gần đây",
+            searchRecentClear: "Xóa",
+            postReadingTime: "Đọc khoảng {minutes} phút",
+            postTableOfContents: "Mục lục",
+            postRelatedHeading: "Bài viết liên quan",
+            newsletterHeading: "Đăng ký nhận bài mới",
+            newsletterDescription: "Nhận email mỗi khi mình đăng bài mới. Không quảng cáo.",
+            newsletterEmailPlaceholder: "Email của bạn",
+            newsletterSubmit: "Đăng ký",
+            newsletterSubmitting: "Đang gửi…",
+            newsletterSuccess: "Đăng ký thành công! Kiểm tra email để xác nhận.",
+            newsletterErrorGeneric: "Không thể đăng ký. Vui lòng thử lại.",
+            newsletterErrorInvalidEmail: "Email không hợp lệ.",
+            commentEdit: "Sửa",
+            commentEditSave: "Lưu",
+            commentEditCancel: "Hủy",
+            commentEdited: "(đã sửa)",
         },
     },
     en: {
@@ -417,6 +455,23 @@ const dictionaries: Record<Locale, Dictionary> = {
             searchNoResults: "No posts match your search.",
             searchResultsCount: "{count} results",
             searchCloseAria: "Close search",
+            searchRecentHeading: "Recent searches",
+            searchRecentClear: "Clear",
+            postReadingTime: "{minutes} min read",
+            postTableOfContents: "On this page",
+            postRelatedHeading: "Related posts",
+            newsletterHeading: "Subscribe to new posts",
+            newsletterDescription: "Get an email when I post something new. No spam.",
+            newsletterEmailPlaceholder: "Your email",
+            newsletterSubmit: "Subscribe",
+            newsletterSubmitting: "Sending…",
+            newsletterSuccess: "Subscribed! Check your inbox to confirm.",
+            newsletterErrorGeneric: "Could not subscribe. Please try again.",
+            newsletterErrorInvalidEmail: "Invalid email.",
+            commentEdit: "Edit",
+            commentEditSave: "Save",
+            commentEditCancel: "Cancel",
+            commentEdited: "(edited)",
         },
     },
 };

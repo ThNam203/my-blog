@@ -1,12 +1,16 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllPosts, getPostBySlug } from "@/lib/api";
+import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/api";
 import markdownToHtml from "@/lib/markdownToHtml";
+import { estimateReadingMinutes, processPostHtmlAsync } from "@/lib/post-html";
 import Container from "@/app/_components/container";
 import { PostBody } from "@/app/_components/post-body";
 import { PostHeader } from "@/app/_components/post-header";
 import { CommentSection } from "@/app/_components/comments/comment-section";
 import { PostReactions } from "@/app/_components/post-reactions";
+import { ScrollProgress } from "@/app/_components/scroll-progress";
+import { TableOfContents } from "@/app/_components/table-of-contents";
+import { RelatedPosts } from "@/app/_components/related-posts";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isValidLocale } from "@/i18n/config";
 
@@ -29,27 +33,46 @@ export default async function Post(props: Params) {
         return notFound();
     }
 
-    const content = await markdownToHtml(post.content || "");
+    const rawHtml = await markdownToHtml(post.content || "");
+    const { html, headings } = await processPostHtmlAsync(rawHtml);
+    const readingMinutes = estimateReadingMinutes(post.content || "");
     const dictionary = getDictionary(params.locale);
+    const related = getRelatedPosts(params.slug, params.locale);
 
     return (
         <main>
+            <ScrollProgress />
             <Container>
-                <article className="mb-32">
-                    <PostHeader
-                        title={post.title}
-                        categories={post.categories}
-                        coverImage={post.coverImage}
-                        date={post.date}
-                        author={post.author}
-                        locale={params.locale}
-                        addresses={post.addresses}
-                    />
-                    <PostBody content={content} />
-                </article>
+                <div className="xl:grid xl:grid-cols-[1fr_15rem] xl:gap-8">
+                    <article className="mb-32 min-w-0">
+                        <PostHeader
+                            title={post.title}
+                            categories={post.categories}
+                            coverImage={post.coverImage}
+                            date={post.date}
+                            author={post.author}
+                            locale={params.locale}
+                            addresses={post.addresses}
+                            readingMinutes={readingMinutes}
+                            readingTimeLabel={dictionary.ui.postReadingTime}
+                        />
+                        <PostBody content={html} />
+                    </article>
+                    <aside className="hidden xl:block">
+                        <TableOfContents
+                            headings={headings}
+                            label={dictionary.ui.postTableOfContents}
+                        />
+                    </aside>
+                </div>
                 <PostReactions
                     postSlug={params.slug}
                     reactionLabel={dictionary.ui.reactionsLabel}
+                />
+                <RelatedPosts
+                    posts={related}
+                    locale={params.locale}
+                    heading={dictionary.ui.postRelatedHeading}
                 />
                 <CommentSection postSlug={params.slug} locale={params.locale} />
             </Container>
@@ -70,13 +93,13 @@ export async function generateMetadata(props: Params): Promise<Metadata> {
 
     const dictionary = getDictionary(params.locale);
     const title = `${post.title} | ${dictionary.metadata.siteName}`;
-    const ogImageUrl = post.ogImage?.url ?? post.coverImage;
+    const explicitOg = post.ogImage?.url;
 
     return {
         title,
         openGraph: {
             title,
-            ...(ogImageUrl ? { images: [ogImageUrl] } : {}),
+            ...(explicitOg ? { images: [explicitOg] } : {}),
         },
     };
 }
