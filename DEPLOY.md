@@ -2,15 +2,9 @@
 
 ## Supabase
 
-Run in SQL editor:
+Apply `supabase/schema.sql` in the SQL editor (or keep your project in sync with it).
 
-```sql
--- supabase/migrations/0001_comment_editing.sql
-```
-
-Adds `comments.updated_at` + UPDATE RLS policy.
-
-Create two Database Webhooks (Dashboard → Database → Webhooks):
+Create two Database Webhooks (Dashboard → Database → Webhooks). Use the **same** secret value in both (stored in env as `NOTIFY_WEBHOOK_SECRET`):
 
 | Source              | Event  | Target URL                               | Header                          |
 | ------------------- | ------ | ---------------------------------------- | ------------------------------- |
@@ -37,19 +31,17 @@ ADMIN_EMAIL=you@example.com
 # New — required
 RESEND_API_KEY=re_xxx
 RESEND_AUDIENCE_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-COMMENT_WEBHOOK_SECRET=<long random string, matches webhook header>
-COMMENT_NOTIFY_FROM=blog@your-verified-domain.com
-
-# New — optional (fall back to ADMIN_EMAIL)
-COMMENT_NOTIFY_TO=
-CONFESSION_NOTIFY_TO=
+RESEND_NOTIFY_FROM=blog@your-verified-domain.com
+NOTIFY_WEBHOOK_SECRET=<long random string, same for both webhooks, header x-webhook-secret>
 ```
 
-Generate `COMMENT_WEBHOOK_SECRET`:
+Generate `NOTIFY_WEBHOOK_SECRET`:
 
 ```
 openssl rand -hex 32
 ```
+
+If you already set the old names, they still work: `COMMENT_WEBHOOK_SECRET`, `COMMENT_NOTIFY_FROM` (prefer renaming when convenient).
 
 ## Verify post-deploy
 
@@ -58,7 +50,8 @@ openssl rand -hex 32
 - `GET /vi/rss.xml` + `/en/rss.xml` return RSS.
 - `GET /vi/posts/<slug>/opengraph-image` returns 1200×630 PNG.
 - Open a post → `Cmd-K` opens search → type accented query (`sai gon`) → results show with highlight.
-- Comment on a post while signed in → optimistic insert, `(edited)` pill after edit, email arrives at `COMMENT_NOTIFY_TO`.
+- Comment on a post while signed in → optimistic insert, email arrives at `ADMIN_EMAIL`.
+- Submit a confession → email arrives at `ADMIN_EMAIL`.
 - Newsletter form submits → contact appears in Resend Audience.
 
 ## Not deployed by this commit
@@ -68,6 +61,6 @@ openssl rand -hex 32
 
 ## Don'ts
 
-- Don't commit any of the `RESEND_*` / `COMMENT_WEBHOOK_SECRET` to git.
+- Don't commit any of the `RESEND_*` / `NOTIFY_WEBHOOK_SECRET` to git.
 - Don't deploy without sender domain verified — Resend returns 403 and comment webhooks 502.
 - Don't point webhooks at a preview URL; they fire from prod data into whatever you target.

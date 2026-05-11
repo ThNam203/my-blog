@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { WEB_DEFAULT_URL } from "@/lib/constants";
+import { notifyWebhookSecret, resendNotifyFrom } from "@/lib/notify-env";
 
 type ConfessionRow = {
     id: string;
@@ -16,7 +17,7 @@ type SupabaseWebhookPayload = {
 const SITE_URL = WEB_DEFAULT_URL.replace(/\/$/, "");
 
 export async function POST(request: Request) {
-    const secret = process.env.COMMENT_WEBHOOK_SECRET;
+    const secret = notifyWebhookSecret();
     if (!secret) {
         return NextResponse.json({ error: "webhook secret not configured" }, { status: 500 });
     }
@@ -28,12 +29,14 @@ export async function POST(request: Request) {
     }
 
     const apiKey = process.env.RESEND_API_KEY;
-    const to = process.env.CONFESSION_NOTIFY_TO ?? process.env.ADMIN_EMAIL;
-    const from = process.env.COMMENT_NOTIFY_FROM;
+    const to = process.env.ADMIN_EMAIL;
+    const from = resendNotifyFrom();
 
     if (!apiKey || !to || !from) {
         return NextResponse.json(
-            { error: "RESEND_API_KEY, COMMENT_NOTIFY_FROM, and CONFESSION_NOTIFY_TO (or ADMIN_EMAIL) must be set" },
+            {
+                error: "RESEND_API_KEY, RESEND_NOTIFY_FROM, and ADMIN_EMAIL must be set",
+            },
             { status: 500 },
         );
     }

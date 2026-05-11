@@ -43,8 +43,7 @@ create table public.comments (
   user_id     uuid        not null references auth.users(id) on delete cascade,
   parent_id   uuid        references public.comments(id) on delete cascade,
   body        text        not null check (char_length(body) between 1 and 2000),
-  created_at  timestamptz not null default now(),
-  updated_at  timestamptz
+  created_at  timestamptz not null default now()
 );
 
 alter table public.comments enable row level security;
@@ -58,9 +57,6 @@ create policy "authenticated users can insert comments"
 -- Users can delete only their own comments (admin deletion is handled server-side via service role)
 create policy "users can delete own comments"
   on public.comments for delete using (auth.uid() = user_id);
-
-create policy "users can update own comments"
-  on public.comments for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
 -- Index for fast per-post queries
 create index comments_post_slug_idx on public.comments(post_slug);

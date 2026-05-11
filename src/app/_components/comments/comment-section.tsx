@@ -54,10 +54,6 @@ export async function CommentSection({ postSlug, locale }: Props) {
             commentsDelete={dictionary.ui.commentsDelete}
             commentsDeleteCommentAria={dictionary.ui.commentsDeleteCommentAria}
             commentsDeleteReplyAria={dictionary.ui.commentsDeleteReplyAria}
-            commentEdit={dictionary.ui.commentEdit}
-            commentEditSave={dictionary.ui.commentEditSave}
-            commentEditCancel={dictionary.ui.commentEditCancel}
-            commentEdited={dictionary.ui.commentEdited}
         />
     );
 }

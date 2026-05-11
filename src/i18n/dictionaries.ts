@@ -122,10 +122,6 @@ export type Dictionary = {
         newsletterSuccess: string;
         newsletterErrorGeneric: string;
         newsletterErrorInvalidEmail: string;
-        commentEdit: string;
-        commentEditSave: string;
-        commentEditCancel: string;
-        commentEdited: string;
     };
 };
 
@@ -329,10 +325,6 @@ const dictionaries: Record<Locale, Dictionary> = {
             newsletterSuccess: "Đăng ký thành công! Kiểm tra email để xác nhận.",
             newsletterErrorGeneric: "Không thể đăng ký. Vui lòng thử lại.",
             newsletterErrorInvalidEmail: "Email không hợp lệ.",
-            commentEdit: "Sửa",
-            commentEditSave: "Lưu",
-            commentEditCancel: "Hủy",
-            commentEdited: "(đã sửa)",
         },
     },
     en: {
@@ -465,10 +457,6 @@ const dictionaries: Record<Locale, Dictionary> = {
             newsletterSuccess: "Subscribed! Check your inbox to confirm.",
             newsletterErrorGeneric: "Could not subscribe. Please try again.",
             newsletterErrorInvalidEmail: "Invalid email.",
-            commentEdit: "Edit",
-            commentEditSave: "Save",
-            commentEditCancel: "Cancel",
-            commentEdited: "(edited)",
         },
     },
 };

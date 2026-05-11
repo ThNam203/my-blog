@@ -4,7 +4,7 @@ import { useCallback, useOptimistic, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Comment } from "@/lib/supabase/types";
-import { addComment, deleteComment, editComment } from "@/lib/actions/comments";
+import { addComment, deleteComment } from "@/lib/actions/comments";
 import { CommentItem } from "./comment-item";
 import { CommentForm } from "./comment-form";
 import { AuthModal } from "./auth-modal";
@@ -33,27 +33,14 @@ type Props = {
     commentsDelete: string;
     commentsDeleteCommentAria: string;
     commentsDeleteReplyAria: string;
-    commentEdit: string;
-    commentEditSave: string;
-    commentEditCancel: string;
-    commentEdited: string;
 };
 
-type OptimisticAction =
-    | { type: "add"; comment: Comment }
-    | { type: "edit"; id: string; body: string }
-    | { type: "delete"; id: string };
+type OptimisticAction = { type: "add"; comment: Comment } | { type: "delete"; id: string };
 
 function reducer(state: Comment[], action: OptimisticAction): Comment[] {
     switch (action.type) {
         case "add":
             return [...state, action.comment];
-        case "edit":
-            return state.map((c) =>
-                c.id === action.id
-                    ? { ...c, body: action.body, updated_at: new Date().toISOString() }
-                    : c,
-            );
         case "delete":
             return state.filter((c) => c.id !== action.id && c.parent_id !== action.id);
         default:
@@ -85,10 +72,6 @@ export function CommentList(props: Props) {
         commentsDelete,
         commentsDeleteCommentAria,
         commentsDeleteReplyAria,
-        commentEdit,
-        commentEditSave,
-        commentEditCancel,
-        commentEdited,
     } = props;
 
     const router = useRouter();
@@ -113,7 +96,6 @@ export function CommentList(props: Props) {
                 parent_id: parentId,
                 body: trimmed,
                 created_at: new Date().toISOString(),
-                updated_at: null,
                 profiles: currentUserDisplayName
                     ? { display_name: currentUserDisplayName }
                     : null,
@@ -139,23 +121,6 @@ export function CommentList(props: Props) {
             postSlug,
             router,
         ],
-    );
-
-    const handleEdit = useCallback(
-        async (commentId: string, body: string) => {
-            const trimmed = body.trim();
-            if (!trimmed) return;
-            startTransition(async () => {
-                applyOptimistic({ type: "edit", id: commentId, body: trimmed });
-                const result = await editComment(commentId, trimmed, postSlug, locale);
-                if (result.error) {
-                    toast.error(result.error);
-                } else {
-                    router.refresh();
-                }
-            });
-        },
-        [applyOptimistic, locale, postSlug, router],
     );
 
     const handleDelete = useCallback(
@@ -224,12 +189,7 @@ export function CommentList(props: Props) {
                             deleteLabel={commentsDelete}
                             deleteCommentAria={commentsDeleteCommentAria}
                             deleteReplyAria={commentsDeleteReplyAria}
-                            editLabel={commentEdit}
-                            editSaveLabel={commentEditSave}
-                            editCancelLabel={commentEditCancel}
-                            editedLabel={commentEdited}
                             onReply={(body) => handleAdd(body, comment.id)}
-                            onEdit={(id, body) => handleEdit(id, body)}
                             onDelete={(id) => handleDelete(id)}
                         />
                     ))}
