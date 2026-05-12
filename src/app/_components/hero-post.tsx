@@ -35,7 +35,13 @@ export function HeroPost({
         <section>
             {coverImage ? (
                 <div className="mb-8 md:mb-16">
-                    <CoverImage title={title} src={coverImage} slug={slug} locale={locale} />
+                    <CoverImage
+                        title={title}
+                        src={coverImage}
+                        slug={slug}
+                        locale={locale}
+                        priority
+                    />
                 </div>
             ) : null}
             <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">

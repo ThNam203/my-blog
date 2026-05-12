@@ -5,7 +5,8 @@
         "lint": "eslint .",
         "build": "next build",
         "start": "next start",
-        "new-post": "jiti scripts/new-post.ts"
+        "new-post": "jiti scripts/new-post.ts",
+        "compress-images": "jiti scripts/compress-images.ts"
     },
     "dependencies": {
         "@supabase/ssr": "^0.10.2",

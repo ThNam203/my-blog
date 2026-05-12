@@ -8,7 +8,7 @@ import { defaultLocale, isValidLocale } from "@/i18n/config";
 import "./globals.css";
 import { SiteToastContainer } from "@/app/_components/site-toast-container";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], display: "swap", preload: true });
 const THEME_STORAGE_KEY = "nam-blog-theme";
 const noFoucScript = `(() => {
   const SYSTEM = "system";
