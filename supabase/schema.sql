@@ -54,7 +54,7 @@ create policy "comments are viewable by everyone"
 create policy "authenticated users can insert comments"
   on public.comments for insert with check (auth.uid() = user_id);
 
--- Users can delete only their own comments (admin deletion is handled server-side via service role)
+-- Users can delete only their own comments (admin deletion is handled server-side with the secret key)
 create policy "users can delete own comments"
   on public.comments for delete using (auth.uid() = user_id);
 
@@ -74,7 +74,7 @@ alter table public.confessions enable row level security;
 create policy "confessions are viewable by everyone"
   on public.confessions for select using (true);
 
--- Inserts are performed only via service role in server actions (no anon insert policy)
+-- Inserts are performed only with the secret key in server actions (no public insert policy)
 
 create index confessions_created_at_idx on public.confessions(created_at desc);
 
@@ -93,6 +93,6 @@ alter table public.post_reactions enable row level security;
 create policy "reactions are viewable by everyone"
   on public.post_reactions for select using (true);
 
--- Inserts/deletes are performed only via service role in server actions
+-- Inserts/deletes are performed only with the secret key in server actions
 
 create index post_reactions_post_slug_idx on public.post_reactions(post_slug);

@@ -7,14 +7,30 @@ import { Comment } from "@/lib/supabase/types";
 
 export async function getComments(postSlug: string): Promise<Comment[]> {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    const { data: rows, error } = await supabase
         .from("comments")
-        .select("*, profiles(display_name)")
+        .select("*")
         .eq("post_slug", postSlug)
         .order("created_at", { ascending: true });
 
-    if (error || !data?.length) return [];
-    return data as unknown as Comment[];
+    if (error) return [];
+    if (!rows?.length) return [];
+
+    const userIds = [...new Set(rows.map((r) => r.user_id))];
+    const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, display_name")
+        .in("id", userIds);
+
+    const displayNameByUserId = new Map((profiles ?? []).map((p) => [p.id, p.display_name]));
+
+    return rows.map((row) => ({
+        ...row,
+        profiles: (() => {
+            const name = displayNameByUserId.get(row.user_id);
+            return name != null ? { display_name: name } : null;
+        })(),
+    }));
 }
 
 export async function addComment(
@@ -71,7 +87,7 @@ export async function deleteComment(
     const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
 
     if (isAdmin) {
-        // Admin bypasses RLS using service role client
+        // Admin bypasses RLS using the server-only secret key.
         const admin = createAdminClient();
         const { error } = await admin.from("comments").delete().eq("id", commentId);
         if (error) return { error: error.message };
