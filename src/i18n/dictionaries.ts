@@ -226,6 +226,10 @@ const dictionaries: Record<Locale, Dictionary> = {
                     text: "Bạn không cần hoàn hảo để bắt đầu; bạn cần bắt đầu để trở nên hoàn hảo.",
                     author: "Zig Ziglar",
                 },
+                {
+                    text: "Viết một cuốn tiểu thuyết cũng giống như lái xe vào ban đêm. Bạn chỉ có thể nhìn thấy mọi thứ trong tầm chiếu sáng của đèn pha, nhưng nhờ vậy mà bạn có thể đi đến cuối hành trình.",
+                    author: "E. L. Doctorow (Trích Viết & Sống)",
+                },
             ],
             footerQuotePrevAria: "Trích dẫn trước",
             footerQuoteNextAria: "Trích dẫn sau",
@@ -358,6 +362,10 @@ const dictionaries: Record<Locale, Dictionary> = {
                 {
                     text: "You don't have to be great to start, but you have to start to be great",
                     author: "Zig Ziglar",
+                },
+                {
+                    text: "Writing is like driving at night in the fog. You can only see as far as your headlights, but you can make the whole trip that way.",
+                    author: "E. L. Doctorow",
                 },
             ],
             footerQuotePrevAria: "Previous quote",

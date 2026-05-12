@@ -40,4 +40,9 @@ export const MUSIC_TRACKS: MusicTrack[] = [
         title: "Sài Gòn hôm nay mưa",
         artist: "JSOL, Hoàng Duyên",
     },
+    {
+        src: "/music/yeu_em_thi_gat_dau.mp3",
+        title: "Yêu em thì gật đầu",
+        artist: "Lê Bảo Hân Cover",
+    },
 ];
