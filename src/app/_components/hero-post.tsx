@@ -40,7 +40,7 @@ export function HeroPost({
                         src={coverImage}
                         slug={slug}
                         locale={locale}
-                        priority
+                        preload={true}
                     />
                 </div>
             ) : null}

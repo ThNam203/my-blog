@@ -8,10 +8,10 @@ type Props = {
     src: string;
     slug?: string;
     locale?: Locale;
-    priority?: boolean;
+    preload?: boolean;
 };
 
-const CoverImage = ({ title, src, slug, locale, priority = false }: Props) => {
+const CoverImage = ({ title, src, slug, locale, preload = false }: Props) => {
     const image = (
         <Image
             src={src}
@@ -22,8 +22,8 @@ const CoverImage = ({ title, src, slug, locale, priority = false }: Props) => {
             width={1300}
             height={630}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1300px"
-            priority={priority}
-            loading={priority ? undefined : "lazy"}
+            preload={preload}
+            loading={preload ? "eager" : "lazy"}
             quality={75}
         />
     );

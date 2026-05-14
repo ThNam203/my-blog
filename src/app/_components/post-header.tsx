@@ -40,7 +40,7 @@ export function PostHeader({
             </div>
             {coverImage ? (
                 <div className="mb-8 md:mb-16 sm:mx-0">
-                    <CoverImage title={title} src={coverImage} priority />
+                    <CoverImage title={title} src={coverImage} preload={true} />
                 </div>
             ) : null}
             <div className="max-w-2xl mx-auto">
